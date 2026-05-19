@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liquid Web — El futuro de la web será líquido</title>
+<meta name="description" content="Manifiesto del protocolo abierto para la web generativa. El futuro de la web será líquido.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0e0e;
+    --ink-2: #3a3a3a;
+    --ink-3: #7a7a7a;
+    --ink-4: #b0b0b0;
+    --paper: #f5f2ec;
+    --paper-2: #ede9e0;
+    --paper-3: #e4dfd4;
+    --accent: #1a1a8c;
+    --accent-soft: rgba(26, 26, 140, 0.08);
+    --accent-border: rgba(26, 26, 140, 0.2);
+    --rule: rgba(14, 14, 14, 0.12);
+    --rule-strong: rgba(14, 14, 14, 0.28);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ── GRID LINES ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--rule) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 56px;
+    background: rgba(245, 242, 236, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .header-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .header-logo span {
+    color: var(--accent);
+  }
+
+  .lang-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--paper-2);
+    border-radius: 20px;
+    padding: 3px;
+    border: 1px solid var(--rule-strong);
+  }
+
+  .lang-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    padding: 5px 14px;
+    border-radius: 16px;
+    border: none;
+    background: transparent;
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .lang-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 40px 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 24px;
+    padding-top: 96px;
+  }
+
+  .hero-headline {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(56px, 9vw, 120px);
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(15px, 2vw, 19px);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 600px;
+
+  }
+
+  .owner {
+    font-family:'EB Garamond', serif; f
+    ont-size: 22px; 
+    font-style: italic;
+    color:var(--ink-3);
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  /* ── SCROLL HINT ── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    right: 40px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--ink-4);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0%, 100% { width: 40px; opacity: 1; }
+    50% { width: 16px; opacity: 0.4; }
+  }
+
+  /* ── MAIN CONTENT ── */
+  .content {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 160px;
+  }
+
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  /* ── CHAPTER ── */
+  .chapter-block {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0 60px;
+    padding: 80px 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+
+  .chapter-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+
+  .chapter-num {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 8px;
+  }
+
+  .chapter-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-3);
+    line-height: 1.4;
+  }
+
+  .chapter-body {
+    max-width: 680px;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .body-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 21px;
+    line-height: 1.75;
+    color: var(--ink-2);
+    margin-bottom: 1.5rem;
+  }
+
+  .body-text strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .pull-quote {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 3rem 0;
+    padding-left: 28px;
+    border-left: 3px solid var(--accent);
+    position: relative;
+  }
+
+  /* ── PERSONA CARDS ── */
+  .personas {
+    display: grid;
+    gap: 16px;
+    margin: 2rem 0;
+  }
+
+  .persona-card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .persona-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0.3;
+  }
+
+  .persona-card:hover { border-color: var(--rule-strong); }
+
+  .persona-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+
+  .persona-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+
+  .persona-text em {
+    font-style: italic;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ── PROTOCOL BLOCK ── */
+  .protocol-block {
+    background: var(--ink);
+    border-radius: 2px;
+    padding: 36px 40px;
+    margin: 2.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .protocol-block::after {
+    content: '{}';
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 80px;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .protocol-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 24px;
+  }
+
+  .protocol-row {
+    display: flex;
+    gap: 32px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    align-items: baseline;
+  }
+
+  .protocol-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .protocol-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+
+  .protocol-val {
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.5;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    margin: 2.5rem 0;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 80px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule-strong);
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 2rem;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .timeline-year {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-3);
+    min-width: 64px;
+    text-align: right;
+    padding-top: 2px;
+    position: relative;
+  }
+
+  .timeline-year::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--paper-3);
+    border: 1.5px solid var(--rule-strong);
+    z-index: 1;
+  }
+
+  .timeline-item.future .timeline-year::after {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  .timeline-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    padding-left: 24px;
+    border-left: none;
+    flex: 1;
+  }
+
+  .timeline-text strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ── CTA BLOCK ── */
+  .cta-block {
+    background: var(--paper-3);
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    padding: 48px 52px;
+    margin: 3rem 0;
+  }
+
+  .cta-headline {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  .cta-body {
+    font-family: 'EB Garamond', serif;
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-body em { font-style: italic; }
+
+  .need-list {
+    list-style: none;
+    margin: 0 0 2rem;
+  }
+
+  .need-list li {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .need-list li:last-child { border-bottom: none; }
+
+  .need-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── CLOSING ── */
+  .closing-section {
+    padding: 80px 0 40px;
+    border-top: 1px solid var(--rule);
+    text-align: center;
+  }
+
+  .closing-poem {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(32px, 5vw, 64px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 48px;
+  }
+
+  .sig {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--ink-4);
+    text-transform: uppercase;
+    line-height: 2;
+  }
+
+  /* ── PILLARS ── */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 2rem 0;
+  }
+
+  .pillar-card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .pillar-card:hover { border-color: var(--rule-strong); }
+
+  .pillar-num {
+    font-family: 'EB Garamond', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--ink-4);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .pillar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  .pillar-desc {
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow { animation: fadeUp 0.7s ease both; }
+  .hero-headline { animation: fadeUp 0.7s 0.12s ease both; }
+  .hero-sub { animation: fadeUp 0.7s 0.24s ease both; }
+  .owner { animation: fadeUp 0.7s 0.24s ease both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .site-header { padding: 0 20px; }
+    .hero, .content { padding-left: 20px; padding-right: 20px; }
+
+    .chapter-block {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .chapter-sidebar { position: static; }
+
+    .protocol-block { padding: 24px 20px; }
+    .protocol-row { flex-direction: column; gap: 6px; }
+    .protocol-key { min-width: unset; }
+
+    .cta-block { padding: 32px 24px; }
+
+    .timeline::before { left: 52px; }
+    .timeline-year { min-width: 52px; }
+  }
+
+  /* ── PRINT / REDUCED MOTION ── */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-eyebrow, .hero-headline, .hero-sub, .owner { animation: none; }
+    .scroll-hint::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#" class="header-logo">Liquid<span>Web</span></a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btn-es" onclick="showLang('es')">ES</button>
+    <button class="lang-btn" id="btn-en" onclick="showLang('en')">EN</button>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+<section class="hero">
+  <div id="hero-es">
+    <p class="hero-eyebrow">Manifiesto · Protocolo abierto · 2026</p>
+    <h1 class="hero-headline">El futuro<br>de la web<br><em>será líquido.</em></h1>
+    <p class="hero-sub">Durante treinta años hemos construido webs como si fueran carteles de piedra. Fijos. Universales. Idénticos para todos. Eso se acabó.</p>
+    <p class="owner"><b>Por Chris Marlon Miller</b></p>
+  </div>
+  <div id="hero-en" style="display:none;">
+    <p class="hero-eyebrow">Manifesto · Open protocol · 2026</p>
+    <h1 class="hero-headline">The future<br>of the web<br><em>will be liquid.</em></h1>
+    <p class="hero-sub">For thirty years we've built websites like stone billboards. Fixed. Universal. Identical for everyone. That's over.</p>
+    <p class="owner"><b>By Chris Marlon Miller</b></p>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     CONTENT — ESPAÑOL
+════════════════════════════════════════════════ -->
+<main class="content">
+<div id="lang-es" class="section visible">
+
+  <!-- I -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Capítulo I</p>
+      <p class="chapter-title">El mundo que ya no existe</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">La web nació como una biblioteca. Páginas estáticas que respondían preguntas. Luego se convirtió en un comercio. Luego en una red social. En cada iteración, la lógica fue la misma: <strong>tú vas a la web. La web no viene a ti.</strong></p>
+      <p class="body-text">Ese contrato está roto.</p>
+      <p class="body-text">La inteligencia artificial ya responde tus preguntas antes de que abras un navegador. Ya recomienda qué comprar. Ya resume, filtra y decide en tu nombre. El tráfico orgánico lleva dos años cayendo en picado. Las empresas invierten millones en webs que nadie visita porque <strong>el punto de entrada ya no es la web. Es la IA.</strong></p>
+      <blockquote class="pull-quote">"Optimizar tu web para Google en 2025 es como perfeccionar tu escaparate cuando los clientes ya compran por teléfono."</blockquote>
+      <p class="body-text">Y sin embargo, la respuesta del sector es hacer más de lo mismo. Más SEO. Más A/B testing. Más variantes de landing page. Como si el problema fuera que la web no está suficientemente optimizada, cuando el problema es que <strong>la web, tal como la conocemos, ya no es el canal.</strong></p>
+    </div>
+  </div>
+
+  <!-- II -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Capítulo II</p>
+      <p class="chapter-title">Las personas en el centro</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">Detrás de cada visita web hay una persona con un contexto completamente distinto. Y hoy, todas reciben exactamente lo mismo.</p>
+      <div class="personas">
+        <div class="persona-card">
+          <p class="persona-name">Lucía, 67 años, Sevilla</p>
+          <p class="persona-text">Llega a una tienda online buscando un regalo para su nieto. Necesita texto grande, lenguaje cercano, sin tecnicismos. La web le muestra <em>el mismo diseño que a un desarrollador de 28 años en Berlín.</em></p>
+        </div>
+        <div class="persona-card">
+          <p class="persona-name">Andrei, director de compras, Bucarest</p>
+          <p class="persona-text">Evalúa proveedores industriales desde una tablet con mala conexión. Necesita datos, certificaciones y precios rápido. La web le muestra <em>un hero animado de 4MB que tarda 8 segundos en cargar.</em></p>
+        </div>
+        <div class="persona-card">
+          <p class="persona-name">Sara, 19 años, Barcelona</p>
+          <p class="persona-text">Llega desde un post de Instagram ya convencida de comprar. Solo necesita confirmar la talla y pagar. La web le muestra <em>cinco secciones de storytelling de marca que no le interesan.</em></p>
+        </div>
+      </div>
+      <p class="body-text">El problema no es el diseño. El problema es que <strong>una sola versión de la realidad no puede servir a todas las personas.</strong> Y durante treinta años hemos actuado como si pudiera.</p>
+    </div>
+  </div>
+
+  <!-- III -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Capítulo III</p>
+      <p class="chapter-title">El protocolo</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">Liquid Web propone un cambio de paradigma simple en su forma, radical en sus implicaciones.</p>
+      <p class="body-text">Una empresa publica su esencia en un archivo estructurado en la raíz de su dominio. No una página. No un diseño. Su verdad: quién es, qué ofrece, cómo habla, qué assets tiene, qué quiere comunicar y a quién. Un agente de IA lo lee. Y construye, en tiempo real, la experiencia exacta que esa persona necesita en ese momento.</p>
+      <div class="protocol-block">
+        <p class="protocol-label">Así funciona</p>
+        <div class="protocol-row">
+          <span class="protocol-key">/agent.json</span>
+          <span class="protocol-val">La esencia de la empresa — voz, productos, assets, lógica, intención</span>
+        </div>
+        <div class="protocol-row">
+          <span class="protocol-key">&lt;meta agent&gt;</span>
+          <span class="protocol-val">Declara el archivo al navegador. Un estándar abierto que cualquiera puede implementar</span>
+        </div>
+        <div class="protocol-row">
+          <span class="protocol-key">navegador IA</span>
+          <span class="protocol-val">Lee el archivo, entiende al visitante, genera la experiencia. En tiempo real. Sin variantes precreadas</span>
+        </div>
+      </div>
+      <p class="body-text">No hay variantes precreadas. No hay A/B testing. <strong>La página no existe hasta que tú la vas a ver.</strong> Se genera para ti, con tu contexto, en tu dispositivo, en tu idioma, con tu intención.</p>
+      <p class="body-text">¿Llevas gafas de realidad aumentada? La experiencia adopta esa forma. ¿Usas un lector de pantalla? El contenido se restructura para ser escuchado. ¿Estás en modo compra y ya conoces el producto? La web lo sabe y va directo al grano.</p>
+      <blockquote class="pull-quote">"Como robots.txt separó el acceso del contenido. Como CSS separó el estilo de la estructura. Liquid Web separa el contenido de la experiencia."</blockquote>
+    </div>
+  </div>
+
+  <!-- IV -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Capítulo IV</p>
+      <p class="chapter-title">El mundo que viene</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">Esto no es ciencia ficción. Es la dirección inevitable de varias fuerzas que ya están en marcha.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">Hoy</div>
+          <div class="timeline-text">Los agentes de IA navegan la web en nombre de personas. <strong>Compran, reservan, investigan.</strong> Las webs no están diseñadas para esto y pierden el 80% de la información relevante en el proceso.</div>
+        </div>
+        <div class="timeline-item future">
+          <div class="timeline-year">2026</div>
+          <div class="timeline-text">Los navegadores integran IA de forma nativa. <strong>La experiencia de navegación empieza a ser personal</strong> para quien tiene acceso a las herramientas adecuadas. Los demás siguen viendo carteles de piedra.</div>
+        </div>
+        <div class="timeline-item future">
+          <div class="timeline-year">2027</div>
+          <div class="timeline-text">Las empresas que publicaron su esencia en formatos que los agentes entienden <strong>capturan el tráfico que las demás perdieron.</strong> El agent.json se convierte en el nuevo SEO.</div>
+        </div>
+        <div class="timeline-item future">
+          <div class="timeline-year">2030</div>
+          <div class="timeline-text">La web estática es un vestigio. <strong>Cada experiencia digital es única.</strong> El contenido y su representación están completamente separados. Liquid Web es el estándar que lo hizo posible.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- V -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Capítulo V</p>
+      <p class="chapter-title">Únete</p>
+    </div>
+    <div class="chapter-body">
+      <div class="cta-block">
+        <h2 class="cta-headline">Esto no lo construye una sola persona.</h2>
+        <p class="cta-body">Liquid Web es un protocolo abierto. No tiene dueño. No tiene plataforma propietaria. Su fuerza vendrá de las personas que decidan que el futuro de la web debe ser de todos, no de quien controle el algoritmo.</p>
+        <p class="cta-body">Necesitamos:</p>
+        <ul class="need-list">
+          <li><span class="need-dot"></span>Desarrolladores que quieran construir el primer intérprete de agent.json</li>
+          <li><span class="need-dot"></span>Empresas dispuestas a publicar su primer agent.json como early adopters</li>
+          <li><span class="need-dot"></span>Diseñadores que entiendan que su trabajo está a punto de cambiar para siempre</li>
+          <li><span class="need-dot"></span>Visionarios que vean lo que todavía no existe y quieran construirlo</li>
+        </ul>
+        <p class="cta-body">Si estás leyendo esto y algo dentro de ti dice <em>"esto tiene sentido"</em> — ese instinto es la señal. El momento de construir el futuro siempre parece demasiado pronto hasta que de repente es demasiado tarde.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing-section">
+    <p class="closing-poem">El agua toma la forma<br>de su contenedor.<br>La web también debería.</p>
+    <p class="sig">Liquid Web · Protocolo abierto para la web generativa · 2026<br>liquidweb.protocol · El futuro de la web será líquido.<br><strong>Chris Marlon Miller</strong> · <a class="sig" href="mailto:chris@marlonmiller.com">chris@marlonmiller.com</a></p>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════
+     CONTENT — ENGLISH
+════════════════════════════════════════════════ -->
+<div id="lang-en" class="section">
+
+  <!-- I -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Chapter I</p>
+      <p class="chapter-title">The world that no longer exists</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">The web was born as a library. Static pages that answered questions. Then it became commerce. Then a social network. In every iteration, the logic was the same: <strong>you go to the web. The web doesn't come to you.</strong></p>
+      <p class="body-text">That contract is broken.</p>
+      <p class="body-text">AI already answers your questions before you open a browser. It already recommends what to buy. It already summarizes, filters, and decides on your behalf. Organic traffic has been falling for two years. Companies invest millions in websites nobody visits because <strong>the entry point is no longer the web. It's AI.</strong></p>
+      <blockquote class="pull-quote">"Optimizing your website for Google in 2025 is like perfecting your shop window when customers are already buying by phone."</blockquote>
+      <p class="body-text">And yet, the industry's response is more of the same. More SEO. More A/B testing. More landing page variants. As if the problem were that the web isn't optimized enough — when the problem is that <strong>the web, as we know it, is no longer the channel.</strong></p>
+    </div>
+  </div>
+
+  <!-- II -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Chapter II</p>
+      <p class="chapter-title">People at the center</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">Behind every web visit is a person with a completely different context. And today, everyone gets exactly the same thing.</p>
+      <div class="personas">
+        <div class="persona-card">
+          <p class="persona-name">Margaret, 67, Manchester</p>
+          <p class="persona-text">Looking for a gift for her grandson. Needs large text, friendly language, no jargon. The website shows her <em>the same design as a 28-year-old developer in Berlin.</em></p>
+        </div>
+        <div class="persona-card">
+          <p class="persona-name">Andrei, procurement director, Bucharest</p>
+          <p class="persona-text">Evaluating industrial suppliers from a tablet with poor connection. Needs data, certifications, and prices fast. The website shows him <em>a 4MB animated hero that takes 8 seconds to load.</em></p>
+        </div>
+        <div class="persona-card">
+          <p class="persona-name">Sara, 19, Barcelona</p>
+          <p class="persona-text">Arrives from an Instagram post already convinced to buy. Just needs to confirm the size and pay. The website shows her <em>five sections of brand storytelling she doesn't care about.</em></p>
+        </div>
+      </div>
+      <p class="body-text">The problem isn't the design. The problem is that <strong>a single version of reality cannot serve all people.</strong> And for thirty years we've acted as if it could.</p>
+    </div>
+  </div>
+
+  <!-- III -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Chapter III</p>
+      <p class="chapter-title">The protocol</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">Liquid Web proposes a paradigm shift — simple in form, radical in its implications.</p>
+      <p class="body-text">A company publishes its essence in a structured file at the root of its domain. Not a page. Not a design. Its truth: who it is, what it offers, how it speaks, what assets it has, what it wants to communicate and to whom. An AI agent reads it. And builds, in real time, the exact experience that person needs at that precise moment.</p>
+      <div class="protocol-block">
+        <p class="protocol-label">How it works</p>
+        <div class="protocol-row">
+          <span class="protocol-key">/agent.json</span>
+          <span class="protocol-val">The company's essence — voice, products, assets, logic, intent</span>
+        </div>
+        <div class="protocol-row">
+          <span class="protocol-key">&lt;meta agent&gt;</span>
+          <span class="protocol-val">Declares the file to the browser. An open standard anyone can implement</span>
+        </div>
+        <div class="protocol-row">
+          <span class="protocol-key">AI browser</span>
+          <span class="protocol-val">Reads the file, understands the visitor, generates the experience. In real time. No pre-created variants</span>
+        </div>
+      </div>
+      <p class="body-text">No pre-created variants. No A/B testing. <strong>The page doesn't exist until you're about to see it.</strong> It's generated for you, with your context, on your device, in your language, with your intent.</p>
+      <p class="body-text">Wearing AR glasses? The experience adapts. Using a screen reader? Content restructures to be heard. In buy mode and already know the product? The web knows and gets straight to the point.</p>
+      <blockquote class="pull-quote">"Like robots.txt separated access from content. Like CSS separated style from structure. Liquid Web separates content from experience."</blockquote>
+    </div>
+  </div>
+
+  <!-- IV -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Chapter IV</p>
+      <p class="chapter-title">The world that's coming</p>
+    </div>
+    <div class="chapter-body">
+      <p class="body-text">This isn't science fiction. It's the inevitable direction of several forces already in motion.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">Today</div>
+          <div class="timeline-text">AI agents browse the web on behalf of people. <strong>They buy, book, research.</strong> Websites aren't designed for this and lose 80% of relevant information in the process.</div>
+        </div>
+        <div class="timeline-item future">
+          <div class="timeline-year">2026</div>
+          <div class="timeline-text">Browsers integrate AI natively. <strong>The browsing experience starts to become personal</strong> for those with the right tools. Everyone else still sees stone billboards.</div>
+        </div>
+        <div class="timeline-item future">
+          <div class="timeline-year">2027</div>
+          <div class="timeline-text">Companies that published their essence in formats agents understand <strong>capture the traffic others lost.</strong> agent.json becomes the new SEO.</div>
+        </div>
+        <div class="timeline-item future">
+          <div class="timeline-year">2030</div>
+          <div class="timeline-text">The static web is a relic. <strong>Every digital experience is unique.</strong> Content and its representation are completely separated. Liquid Web is the standard that made it possible.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- V -->
+  <div class="chapter-block">
+    <div class="chapter-sidebar">
+      <p class="chapter-num">Chapter V</p>
+      <p class="chapter-title">Join us</p>
+    </div>
+    <div class="chapter-body">
+      <div class="cta-block">
+        <h2 class="cta-headline">This isn't built by one person.</h2>
+        <p class="cta-body">Liquid Web is an open protocol. It has no owner. No proprietary platform. Its strength will come from people who decide that the future of the web should belong to everyone — not to whoever controls the algorithm.</p>
+        <p class="cta-body">We need:</p>
+        <ul class="need-list">
+          <li><span class="need-dot"></span>Developers who want to build the first agent.json interpreter</li>
+          <li><span class="need-dot"></span>Companies willing to publish their first agent.json as early adopters</li>
+          <li><span class="need-dot"></span>Designers who understand their work is about to change forever</li>
+          <li><span class="need-dot"></span>Visionaries who see what doesn't exist yet and want to build it</li>
+        </ul>
+        <p class="cta-body">If you're reading this and something inside you says <em>"this makes sense"</em> — that instinct is the signal. The moment to build the future always feels too soon until suddenly it's too late.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing-section">
+    <p class="closing-poem">Water takes the shape<br>of its container.<br>The web should too.</p>
+    <p class="sig">Liquid Web · Open protocol for the generative web · 2026<br>liquidweb.protocol · The future of the web will be liquid.<br><strong>Chris Marlon Miller</strong> · <a class="sig" href="mailto:chris@marlonmiller.com">chris@marlonmiller.com</a></p>
+  </div>
+
+</div>
+</main>
+
+<script>
+function showLang(lang) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.getElementById('lang-' + lang).classList.add('visible');
+  document.getElementById('hero-es').style.display = lang === 'es' ? '' : 'none';
+  document.getElementById('hero-en').style.display = lang === 'en' ? '' : 'none';
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const userLang = navigator.language?.startsWith('es') ? 'es' : 'en';
+  showLang(userLang);
+});
+</script>
+</body>
+</html>
