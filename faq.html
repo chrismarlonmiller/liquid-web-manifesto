@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Liquid Web Protocol</title>
+<meta name="description" content="Frequently asked questions about the Liquid Web Protocol. Real questions, direct answers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0e0e0e;
+  --ink-2: #3a3a3a;
+  --ink-3: #7a7a7a;
+  --ink-4: #b0b0b0;
+  --paper: #f5f2ec;
+  --paper-2: #ede9e0;
+  --paper-3: #e4dfd4;
+  --accent: #1a1a8c;
+  --accent-soft: rgba(26, 26, 140, 0.08);
+  --rule: rgba(14, 14, 14, 0.12);
+  --rule-strong: rgba(14, 14, 14, 0.28);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 56px;
+  background: rgba(245, 242, 236, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.header-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.header-logo span { color: var(--accent); }
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-link {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--accent); }
+
+.lang-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--paper-2);
+  border-radius: 20px;
+  padding: 3px;
+  border: 1px solid var(--rule-strong);
+}
+
+.lang-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 5px 14px;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-btn.active { background: var(--ink); color: var(--paper); }
+
+/* ── I18N ── */
+.lang-en .t-es, .lang-es .t-en { display: none; }
+.lang-en .t-en, .lang-es .t-es { display: revert; }
+span.t-en, span.t-es { display: none; }
+.lang-en span.t-en, .lang-es span.t-es { display: inline; }
+
+/* ── PAGE INTRO ── */
+.page-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 120px 40px 60px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.page-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 20px;
+}
+
+.page-headline {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+.page-headline em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.page-sub {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 600px;
+}
+
+/* ── FAQ CONTENT ── */
+.faq-content {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 40px 140px;
+}
+
+/* ── FAQ ITEM ── */
+.faq-item {
+  border-bottom: 1px solid var(--rule);
+  padding: 0;
+}
+
+.faq-item:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+.faq-question {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.faq-q-text {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  transition: color 0.2s;
+}
+
+.faq-item.open .faq-q-text { color: var(--accent); }
+
+.faq-chevron {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 4px;
+  transition: all 0.25s ease;
+  background: var(--paper-2);
+}
+
+.faq-item.open .faq-chevron {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  display: none;
+  padding-bottom: 36px;
+}
+
+.faq-item.open .faq-answer {
+  display: block;
+}
+
+/* ── ANSWER TYPOGRAPHY ── */
+.faq-answer p {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  margin-bottom: 1.2rem;
+}
+
+.faq-answer p:last-child { margin-bottom: 0; }
+
+.faq-answer strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.faq-answer em {
+  font-style: italic;
+}
+
+/* ── PULL QUOTE inside answer ── */
+.faq-pull {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(18px, 2vw, 22px);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 1.5rem 0;
+  padding-left: 24px;
+  border-left: 3px solid var(--accent);
+}
+
+/* ── COMPARISON ROW ── */
+.faq-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 1.5rem 0;
+}
+
+.compare-card {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 16px 20px;
+}
+
+.compare-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 10px;
+}
+
+.compare-card.highlight {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.compare-card.highlight .compare-label {
+  color: var(--accent);
+}
+
+.compare-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* ── CLOSING CTA ── */
+.faq-cta {
+  margin-top: 72px;
+  padding: 48px 52px;
+  background: var(--paper-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+}
+
+.faq-cta-headline {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.faq-cta-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+.faq-cta-body a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-soft);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .site-header { padding: 0 20px; }
+  .page-intro { padding: 100px 20px 40px; }
+  .faq-content { padding: 40px 20px 80px; }
+  .header-nav { display: none; }
+  .faq-compare { grid-template-columns: 1fr; }
+  .faq-cta { padding: 32px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-chevron { transition: none; }
+  .faq-q-text { transition: none; }
+}
+</style>
+</head>
+<body class="lang-en">
+
+<header class="site-header">
+  <a href="index.html" class="header-logo">Liquid<span>Web</span> Protocol</a>
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link t-en">Manifesto</a>
+    <a href="index.html" class="nav-link t-es">Manifiesto</a>
+    <a href="spec.html" class="nav-link">agent.json</a>
+    <a href="faq.html" class="nav-link active t-en">FAQ</a>
+    <a href="faq.html" class="nav-link active t-es">Preguntas</a>
+  </nav>
+  <div class="lang-toggle">
+    <button class="lang-btn" id="btn-es" onclick="showLang('es')">ES</button>
+    <button class="lang-btn active" id="btn-en" onclick="showLang('en')">EN</button>
+  </div>
+</header>
+
+<!-- ── PAGE INTRO ── -->
+<div class="page-intro">
+  <p class="page-eyebrow t-en">Frequently Asked Questions</p>
+  <p class="page-eyebrow t-es">Preguntas Frecuentes</p>
+  <h1 class="page-headline">
+    <span class="t-en">Real questions.<br><em>Direct answers.</em></span>
+    <span class="t-es">Preguntas reales.<br><em>Respuestas directas.</em></span>
+  </h1>
+  <p class="page-sub t-en">Every idea worth building gets challenged. These are the toughest questions we've received — and the most honest answers we can give.</p>
+  <p class="page-sub t-es">Toda idea que merece construirse recibe desafíos. Estas son las preguntas más difíciles que hemos recibido — y las respuestas más honestas que podemos dar.</p>
+</div>
+
+<!-- ── FAQ LIST ── -->
+<div class="faq-content">
+
+  <!-- Q1 -->
+  <div class="faq-item" id="faq-1">
+    <div class="faq-question" onclick="toggleFaq('faq-1')">
+      <p class="faq-q-text">
+        <span class="t-en">You don't know who the visitor is — how can you personalise?</span>
+        <span class="t-es">No sabes quién es el visitante. ¿Cómo puedes personalizar?</span>
+      </p>
+      <span class="faq-chevron">▾</span>
+    </div>
+    <div class="faq-answer">
+      <p class="t-en">This is true for the server — but the server isn't the point. Identity doesn't come from the site, it comes from the visitor's side. The user's AI agent, browser, and declared preferences carry the context.</p>
+      <p class="t-es">Eso es cierto para el servidor — pero el servidor no es lo importante. La identidad no viene del sitio, viene del lado del visitante. El agente de IA del usuario, el navegador y las preferencias declaradas llevan el contexto.</p>
+
+      <div class="faq-compare">
+        <div class="compare-card">
+          <p class="compare-label t-en">Today</p>
+          <p class="compare-label t-es">Hoy</p>
+          <p class="compare-body t-en">The website tries to guess who you are from anonymous signals — IP, device, referrer. It usually gets it wrong.</p>
+          <p class="compare-body t-es">La web intenta adivinar quién eres a partir de señales anónimas — IP, dispositivo, referrer. Normalmente se equivoca.</p>
+        </div>
+        <div class="compare-card highlight">
+          <p class="compare-label t-en">Liquid Web</p>
+          <p class="compare-label t-es">Liquid Web</p>
+          <p class="compare-body t-en">Your personal agent already knows you. The site doesn't need to — it just needs to know itself.</p>
+          <p class="compare-body t-es">Tu agente personal ya te conoce. El sitio no necesita hacerlo — solo necesita conocerse a sí mismo.</p>
+        </div>
+      </div>
+
+      <p class="t-en">Think of it like a great hotel. The concierge doesn't know you when you walk in — but if you hand them a profile card with your preferences, they can personalise everything instantly. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> is the hotel's profile. Your AI agent is the card.</p>
+      <p class="t-es">Piénsalo como un gran hotel. El conserje no te conoce cuando entras — pero si le das una tarjeta con tus preferencias, puede personalizarlo todo al instante. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> es el perfil del hotel. Tu agente de IA es la tarjeta.</p>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="faq-item" id="faq-2">
+    <div class="faq-question" onclick="toggleFaq('faq-2')">
+      <p class="faq-q-text">
+        <span class="t-en">MCP already exists for this. Why create a new standard?</span>
+        <span class="t-es">Para eso ya existe MCP. ¿Por qué crear un estándar nuevo?</span>
+      </p>
+      <span class="faq-chevron">▾</span>
+    </div>
+    <div class="faq-answer">
+      <p class="t-en">MCP is an excellent protocol — and yes, it can do much of what <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> proposes. Large companies like Figma, JIRA, and major banks are already adopting it. We're not arguing against MCP. We're arguing about adoption.</p>
+      <p class="t-es">MCP es un protocolo excelente — y sí, puede hacer gran parte de lo que propone <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code>. Grandes empresas como Figma, JIRA o los principales bancos ya lo están adoptando. No estamos en contra de MCP. Estamos hablando de adopción.</p>
+
+      <blockquote class="faq-pull t-en">MCP requires infrastructure. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:transparent; padding:0;">agent.json</code> requires a text file.</blockquote>
+      <blockquote class="faq-pull t-es">MCP requiere infraestructura. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:transparent; padding:0;">agent.json</code> requiere un archivo de texto.</blockquote>
+
+      <p class="t-en">The question isn't which is more technically powerful. It's which one gets adopted by the 200 million small business websites that will never spin up a server. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">robots.txt</code> won not because it was the most sophisticated crawling standard — but because any webmaster could create it in five minutes.</p>
+      <p class="t-es">La pregunta no es cuál es técnicamente más potente. Es cuál adoptan los 200 millones de sitios de pequeñas empresas que nunca van a montar un servidor. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">robots.txt</code> ganó no porque fuera el estándar de rastreo más sofisticado — sino porque cualquier webmaster podía crearlo en cinco minutos.</p>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="faq-item" id="faq-3">
+    <div class="faq-question" onclick="toggleFaq('faq-3')">
+      <p class="faq-q-text">
+        <span class="t-en">Small businesses can't generate experiences on their own — they need tools like v0 or Lovable for that.</span>
+        <span class="t-es">Las empresas pequeñas no pueden generar experiencias por sí solas. Para eso necesitan herramientas como v0 o Lovable.</span>
+      </p>
+      <span class="faq-chevron">▾</span>
+    </div>
+    <div class="faq-answer">
+      <p class="t-en">Exactly right — and that's built into the model. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> is the declaration layer. The experience generators — v0, Lovable, and whatever comes next — are the execution layer.</p>
+      <p class="t-es">Completamente de acuerdo — y eso está integrado en el modelo. <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> es la capa de declaración. Los generadores de experiencias — v0, Lovable, y lo que venga después — son la capa de ejecución.</p>
+
+      <div class="faq-compare">
+        <div class="compare-card">
+          <p class="compare-label t-en">Without agent.json</p>
+          <p class="compare-label t-es">Sin agent.json</p>
+          <p class="compare-body t-en">Each time you use a generator, you describe the company manually. What it does, how it talks, who it's for. Every. Single. Time.</p>
+          <p class="compare-body t-es">Cada vez que usas un generador, describes la empresa manualmente. Qué hace, cómo habla, para quién es. Cada. Vez.</p>
+        </div>
+        <div class="compare-card highlight">
+          <p class="compare-label t-en">With agent.json</p>
+          <p class="compare-label t-es">Con agent.json</p>
+          <p class="compare-body t-en">The company publishes its essence once. Any generator reads it and starts directly — no prompt, no manual context.</p>
+          <p class="compare-body t-es">La empresa publica su esencia una vez. Cualquier generador la lee y empieza directamente — sin prompt, sin contexto manual.</p>
+        </div>
+      </div>
+
+      <p class="t-en">This is the same model as HTML and WordPress. HTML is the open standard. WordPress made it accessible to everyone who doesn't know how to code. Liquid Web is the HTML. The generators are the WordPress.</p>
+      <p class="t-es">Este es el mismo modelo que HTML y WordPress. HTML es el estándar abierto. WordPress lo hizo accesible para quien no sabe programar. Liquid Web es el HTML. Los generadores son el WordPress.</p>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="faq-item" id="faq-4">
+    <div class="faq-question" onclick="toggleFaq('faq-4')">
+      <p class="faq-q-text">
+        <span class="t-en">AI generating interfaces in real time is slow and inconsistent. It's not ready.</span>
+        <span class="t-es">Una IA generando interfaces en tiempo real es lento e inconsistente. No está listo.</span>
+      </p>
+      <span class="faq-chevron">▾</span>
+    </div>
+    <div class="faq-answer">
+      <p class="t-en">True. And it's the most honest technical objection there is. Generative rendering at scale — fast, reliable, brand-consistent — is still an unsolved engineering problem.</p>
+      <p class="t-es">Cierto. Y es la objeción técnica más honesta que existe. El rendering generativo a escala — rápido, fiable, coherente con la marca — sigue siendo un problema de ingeniería sin resolver.</p>
+
+      <blockquote class="faq-pull t-en">Protocols are defined before the technology is ready. That's the whole point.</blockquote>
+      <blockquote class="faq-pull t-es">Los protocolos se definen antes de que la tecnología esté lista. Ese es precisamente el objetivo.</blockquote>
+
+      <p class="t-en">HTTP was standardised in 1991. Browsers were terrible for years. CSS was specified in 1994 and barely worked consistently until the mid-2000s. The standard came first. The infrastructure caught up.</p>
+      <p class="t-es">HTTP se estandarizó en 1991. Los navegadores fueron pésimos durante años. CSS se especificó en 1994 y apenas funcionó de forma consistente hasta mediados de los 2000. El estándar llegó primero. La infraestructura lo alcanzó.</p>
+
+      <p class="t-en">Liquid Web is not a bet that generative AI is already good enough. It's a bet that it will be — and that when it is, the standard should already exist so the web doesn't fragment into a hundred incompatible proprietary formats.</p>
+      <p class="t-es">Liquid Web no es una apuesta a que la IA generativa ya es suficientemente buena. Es una apuesta a que lo será — y a que cuando lo sea, el estándar debería existir para que la web no se fragmente en cien formatos propietarios incompatibles.</p>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="faq-item" id="faq-5">
+    <div class="faq-question" onclick="toggleFaq('faq-5')">
+      <p class="faq-q-text">
+        <span class="t-en">Tools like Unbounce or Optimizely already personalise web experiences. What's different here?</span>
+        <span class="t-es">Herramientas como Unbounce u Optimizely ya personalizan experiencias web. ¿Qué hay de diferente aquí?</span>
+      </p>
+      <span class="faq-chevron">▾</span>
+    </div>
+    <div class="faq-answer">
+      <p class="t-en">Those tools personalise between pre-built variants. Someone — a designer, a marketer — created options A, B, and C before you arrived. The system then picks which one to show you.</p>
+      <p class="t-es">Esas herramientas personalizan entre variantes preconstruidas. Alguien — un diseñador, un marketero — creó las opciones A, B y C antes de que llegaras. El sistema elige cuál mostrarte.</p>
+
+      <div class="faq-compare">
+        <div class="compare-card">
+          <p class="compare-label t-en">Current personalisation</p>
+          <p class="compare-label t-es">Personalización actual</p>
+          <p class="compare-body t-en">Choose between A, B, or C. Somebody built those variants. Somebody maintains them. The experience is still a stone billboard — just with a switch on the front.</p>
+          <p class="compare-body t-es">Elegir entre A, B o C. Alguien construyó esas variantes. Alguien las mantiene. La experiencia sigue siendo un cartel de piedra — solo con un interruptor delante.</p>
+        </div>
+        <div class="compare-card highlight">
+          <p class="compare-label t-en">Liquid Web</p>
+          <p class="compare-label t-es">Liquid Web</p>
+          <p class="compare-body t-en">Generate option D — specifically for you, in this moment, with your context. No variants. No pre-built decisions.</p>
+          <p class="compare-body t-es">Generar la opción D — específicamente para ti, en este momento, con tu contexto. Sin variantes. Sin decisiones preconstruidas.</p>
+        </div>
+      </div>
+
+      <p class="t-en">The difference is the same as between a restaurant with a fixed menu and a chef who cooks what you need based on what you tell them. Both serve food. Only one actually adapts to you.</p>
+      <p class="t-es">La diferencia es la misma que entre un restaurante con menú fijo y un chef que cocina lo que necesitas según lo que le cuentas. Los dos sirven comida. Solo uno se adapta de verdad a ti.</p>
+    </div>
+  </div>
+
+  <!-- CLOSING CTA -->
+  <div class="faq-cta">
+    <h2 class="faq-cta-headline t-en">Still have questions?</h2>
+    <h2 class="faq-cta-headline t-es">¿Tienes más preguntas?</h2>
+    <p class="faq-cta-body t-en">
+      Read the <a href="index.html">full manifesto</a> or explore the <a href="spec.html">agent.json specification</a>. If you're a developer thinking about co-building this, we want to hear from you.
+    </p>
+    <p class="faq-cta-body t-es">
+      Lee el <a href="index.html">manifiesto completo</a> o explora la <a href="spec.html">especificación del agent.json</a>. Si eres desarrollador y estás pensando en co-construir esto, queremos escucharte.
+    </p>
+  </div>
+
+</div>
+
+<script>
+function showLang(lang) {
+  document.body.className = 'lang-' + lang;
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  localStorage.setItem('lwp-lang', lang);
+}
+
+(function() {
+  const saved = localStorage.getItem('lwp-lang');
+  if (saved === 'es') showLang('es');
+})();
+
+function toggleFaq(id) {
+  const item = document.getElementById(id);
+  const isOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  // Open clicked if it wasn't open
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+
+</body>
+</html>
