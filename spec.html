@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>agent.json — Liquid Web Protocol Specification</title>
+<meta name="description" content="The official specification for agent.json — the open protocol file that enables generative web experiences.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0e0e0e;
+  --ink-2: #3a3a3a;
+  --ink-3: #7a7a7a;
+  --ink-4: #b0b0b0;
+  --paper: #f5f2ec;
+  --paper-2: #ede9e0;
+  --paper-3: #e4dfd4;
+  --accent: #1a1a8c;
+  --accent-soft: rgba(26, 26, 140, 0.08);
+  --accent-border: rgba(26, 26, 140, 0.2);
+  --rule: rgba(14, 14, 14, 0.12);
+  --rule-strong: rgba(14, 14, 14, 0.28);
+  --green: #2d6a1f;
+  --green-soft: rgba(45, 106, 31, 0.08);
+  --orange: #8c4a1a;
+  --orange-soft: rgba(140, 74, 26, 0.08);
+  --purple: #5a1a8c;
+  --purple-soft: rgba(90, 26, 140, 0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 56px;
+  background: rgba(245, 242, 236, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.header-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.header-logo span { color: var(--accent); }
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-link {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--accent); }
+
+/* ── PAGE INTRO ── */
+.page-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 40px 60px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.page-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 20px;
+}
+
+.page-headline {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+.page-headline em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.page-sub {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 640px;
+}
+
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  background: var(--paper-2);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  padding: 5px 12px;
+}
+
+.version-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* ── LAYOUT ── */
+.spec-layout {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px 120px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 0 60px;
+  align-items: start;
+}
+
+/* ── SIDEBAR NAV ── */
+.spec-sidebar {
+  position: sticky;
+  top: 80px;
+  padding-top: 48px;
+}
+
+.sidebar-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 16px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  border-left: 1px solid var(--rule-strong);
+}
+
+.sidebar-nav li a {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: 7px 16px;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+
+.sidebar-nav li a:hover {
+  color: var(--ink);
+  border-left-color: var(--rule-strong);
+}
+
+.sidebar-nav li a.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--rule);
+  margin: 12px 0;
+}
+
+/* ── SPEC CONTENT ── */
+.spec-content {
+  padding-top: 48px;
+}
+
+/* ── OVERVIEW BLOCK ── */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.overview-card {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 20px 22px;
+}
+
+.overview-num {
+  font-family: 'EB Garamond', serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--ink-4);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.overview-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: 0.04em;
+}
+
+/* ── SECTION HEADERS ── */
+.spec-section {
+  margin-bottom: 64px;
+  scroll-margin-top: 80px;
+}
+
+.spec-section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── BLOCK CARDS ── */
+.block-card {
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+
+.block-card:hover { border-color: var(--rule-strong); }
+
+.block-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  user-select: none;
+}
+
+.block-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+
+.block-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+}
+
+.block-tag {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+
+.tag-required {
+  background: rgba(14,14,14,0.07);
+  color: var(--ink-2);
+  border: 1px solid var(--rule-strong);
+}
+
+.tag-optional {
+  background: var(--green-soft);
+  color: var(--green);
+  border: 1px solid rgba(45,106,31,0.2);
+}
+
+.block-body {
+  padding: 24px;
+  display: none;
+}
+
+.block-body.open { display: block; }
+
+.block-desc {
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin-bottom: 20px;
+}
+
+/* ── JSON CODE BLOCK ── */
+.json-block {
+  background: var(--ink);
+  border-radius: 2px;
+  padding: 24px 28px;
+  overflow-x: auto;
+  position: relative;
+}
+
+.json-block pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.75);
+  white-space: pre;
+}
+
+.json-key   { color: #7ecfff; }
+.json-str   { color: #a8e6a8; }
+.json-num   { color: #ffd580; }
+.json-bool  { color: #ff9db5; }
+.json-null  { color: #ff9db5; }
+.json-comment { color: rgba(255,255,255,0.28); font-style: italic; }
+
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.06);
+  border: none;
+  border-radius: 2px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.1); }
+
+/* ── FIELDS TABLE ── */
+.fields-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+}
+
+.fields-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.fields-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+.fields-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.fields-table td:last-child {
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  color: var(--ink-3);
+}
+
+/* ── FULL EXAMPLE SECTION ── */
+.full-example {
+  background: var(--ink);
+  border-radius: 2px;
+  padding: 36px 40px;
+  margin-top: 12px;
+  position: relative;
+}
+
+.full-example pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.72);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ── PLACEMENT BLOCK ── */
+.placement-block {
+  background: var(--paper-2);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  padding: 28px 32px;
+  margin-top: 12px;
+}
+
+.placement-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+}
+
+.file-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-list li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-list .file-icon {
+  font-size: 10px;
+  color: var(--ink-4);
+  min-width: 12px;
+}
+
+.file-list .file-highlight {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── TOGGLE CHEVRON ── */
+.block-chevron {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--ink-4);
+  transition: transform 0.2s;
+}
+
+.block-card.open .block-chevron { transform: rotate(180deg); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .spec-layout { grid-template-columns: 1fr; }
+  .spec-sidebar { display: none; }
+  .overview-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .site-header { padding: 0 20px; }
+  .page-intro { padding: 100px 20px 40px; }
+  .spec-layout { padding: 0 20px 80px; }
+  .header-nav { display: none; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .full-example { padding: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block-chevron { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" class="header-logo">Liquid<span>Web</span> Protocol</a>
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link">Manifesto</a>
+    <a href="spec.html" class="nav-link active">agent.json</a>
+  </nav>
+</header>
+
+<!-- ── PAGE INTRO ── -->
+<div class="page-intro">
+  <p class="page-eyebrow">Protocol Specification · Open Standard · v1.0</p>
+  <h1 class="page-headline">The <em>agent.json</em><br>specification</h1>
+  <p class="page-sub">A structured file published at the root of any domain. It declares the identity, voice, and intent of a site — so agents can generate the right experience for each individual visitor.</p>
+  <div class="version-badge">
+    <span class="version-dot"></span>
+    v1.0-draft · May 2026 · liquidwebprotocol.com
+  </div>
+</div>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="spec-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="spec-sidebar">
+    <p class="sidebar-title">Contents</p>
+    <ul class="sidebar-nav">
+      <li><a href="#overview" class="active">Overview</a></li>
+      <li><a href="#placement">File placement</a></li>
+      <div class="sidebar-divider"></div>
+      <li><a href="#identity">01 · identity</a></li>
+      <li><a href="#voice">02 · voice</a></li>
+      <li><a href="#products">03 · products</a></li>
+      <li><a href="#intents">04 · intents</a></li>
+      <li><a href="#agent">05 · agent</a></li>
+      <li><a href="#brand">06 · brand</a></li>
+      <li><a href="#contact">07 · contact</a></li>
+      <li><a href="#styles">08 · styles</a></li>
+      <li><a href="#mission">09 · mission</a></li>
+      <li><a href="#goals">10 · goals</a></li>
+      <li><a href="#narrative">11 · narrative</a></li>
+      <li><a href="#segments">12 · segments</a></li>
+      <li><a href="#legal">13 · legal</a></li>
+      <li><a href="#content_governance">14 · content_governance</a></li>
+      <div class="sidebar-divider"></div>
+      <li><a href="#full-example">Full example</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="spec-content">
+
+    <!-- OVERVIEW -->
+    <section class="spec-section" id="overview">
+      <p class="spec-section-title">Overview</p>
+      <div class="overview-grid">
+        <div class="overview-card">
+          <div class="overview-num">14</div>
+          <div class="overview-label">Declarative blocks</div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-num">5</div>
+          <div class="overview-label">Required blocks</div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-num">JSON</div>
+          <div class="overview-label">Standard format</div>
+        </div>
+      </div>
+      <p style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2); margin-bottom:1rem;">
+        <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">agent.json</code> is the machine-readable heart of the Liquid Web Protocol. Like <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">robots.txt</code> tells crawlers what to index, <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">agent.json</code> tells interpreters how to generate a personalised experience from first principles.
+      </p>
+      <p style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2);">
+        It separates what a site <em>is</em> from how it <em>appears</em> — the same leap CSS made in 1996, applied to the entire web experience.
+      </p>
+    </section>
+
+    <!-- PLACEMENT -->
+    <section class="spec-section" id="placement">
+      <p class="spec-section-title">File placement</p>
+      <div class="placement-block">
+        <p class="placement-title">Where to publish it</p>
+        <ul class="file-list">
+          <li><span class="file-icon">📄</span> robots.txt</li>
+          <li><span class="file-icon">📄</span> sitemap.xml</li>
+          <li><span class="file-icon">📄</span> <span class="file-highlight">agent.json</span> &nbsp;← publish here</li>
+          <li><span class="file-icon">📁</span> index.html</li>
+        </ul>
+      </div>
+      <p style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-3); margin-top:16px; line-height:1.6;">
+        The file must be accessible at <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">https://yourdomain.com/agent.json</code> with no authentication. Served as <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">application/json</code>.
+      </p>
+    </section>
+
+    <!-- BLOCK 01: identity -->
+    <section class="spec-section" id="identity">
+      <p class="spec-section-title">Blocks</p>
+
+      <div class="block-card open" id="card-identity">
+        <div class="block-header" onclick="toggleBlock('card-identity')">
+          <span class="block-key">"identity"</span>
+          <span class="block-name">Identity</span>
+          <span class="block-tag tag-required">Required</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body open">
+          <p class="block-desc">Declares who the organisation is. The foundation of every generated experience. An interpreter reads this first to understand the entity behind the site.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"identity"</span>: {
+  <span class="json-key">"name"</span>: <span class="json-str">"Econecta"</span>,
+  <span class="json-key">"type"</span>: <span class="json-str">"SaaS / B2B"</span>,
+  <span class="json-key">"category"</span>: <span class="json-str">"Energy management for SMEs"</span>,
+  <span class="json-key">"tagline"</span>: <span class="json-str">"Energy intelligence for every business"</span>,
+  <span class="json-key">"description"</span>: <span class="json-str">"Platform that helps small and medium businesses understand, reduce and optimise their energy consumption."</span>,
+  <span class="json-key">"founded"</span>: <span class="json-num">2023</span>,
+  <span class="json-key">"language_default"</span>: <span class="json-str">"es"</span>,
+  <span class="json-key">"languages_supported"</span>: [<span class="json-str">"es"</span>, <span class="json-str">"en"</span>]
+}</pre>
+          </div>
+          <table class="fields-table">
+            <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td>name</td><td>string</td><td>Legal or commercial name of the organisation</td></tr>
+              <tr><td>type</td><td>string</td><td>Business model descriptor (SaaS, e-commerce, NGO, etc.)</td></tr>
+              <tr><td>category</td><td>string</td><td>Industry or vertical</td></tr>
+              <tr><td>tagline</td><td>string</td><td>Short positioning line — used in generated headlines</td></tr>
+              <tr><td>description</td><td>string</td><td>1–3 sentence explanation of what the org does</td></tr>
+              <tr><td>language_default</td><td>string</td><td>ISO 639-1 code of the primary language</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BLOCK 02: voice -->
+      <div class="block-card" id="card-voice" style="scroll-margin-top:80px;" id="voice">
+        <div class="block-header" onclick="toggleBlock('card-voice')">
+          <span class="block-key">"voice"</span>
+          <span class="block-name">Voice &amp; Tone</span>
+          <span class="block-tag tag-required">Required</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Defines how the site communicates. Interpreters use this to calibrate register, complexity, and emotional temperature of every generated text element.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"voice"</span>: {
+  <span class="json-key">"tone"</span>: [<span class="json-str">"clear"</span>, <span class="json-str">"direct"</span>, <span class="json-str">"expert without being distant"</span>],
+  <span class="json-key">"personality"</span>: <span class="json-str">"An engineer who communicates like a teacher"</span>,
+  <span class="json-key">"formality"</span>: <span class="json-str">"professional-relaxed"</span>,
+  <span class="json-key">"avoid"</span>: [<span class="json-str">"corporate jargon"</span>, <span class="json-str">"techno-optimism clichés"</span>],
+  <span class="json-key">"pronouns"</span>: <span class="json-str">"second-person singular (you)"</span>,
+  <span class="json-key">"adaptation_rules"</span>: {
+    <span class="json-key">"with_experts"</span>: <span class="json-str">"use technical language freely"</span>,
+    <span class="json-key">"with_non_technical"</span>: <span class="json-str">"use analogies, avoid acronyms"</span>
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 03: products -->
+      <div class="block-card" id="card-products">
+        <div class="block-header" onclick="toggleBlock('card-products')">
+          <span class="block-key">"products"</span>
+          <span class="block-name">Products &amp; Services</span>
+          <span class="block-tag tag-required">Required</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Catalogue of what the site offers. Enables interpreters to surface the right product or service based on the visitor's intent and context, without surfacing irrelevant offers.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"products"</span>: [
+  {
+    <span class="json-key">"id"</span>: <span class="json-str">"dashboard-basic"</span>,
+    <span class="json-key">"name"</span>: <span class="json-str">"Econecta Basic"</span>,
+    <span class="json-key">"description"</span>: <span class="json-str">"Real-time energy monitoring for businesses under 50 employees"</span>,
+    <span class="json-key">"price_from"</span>: <span class="json-num">49</span>,
+    <span class="json-key">"currency"</span>: <span class="json-str">"EUR"</span>,
+    <span class="json-key">"audience"</span>: [<span class="json-str">"SME"</span>, <span class="json-str">"first-time buyer"</span>],
+    <span class="json-key">"key_benefit"</span>: <span class="json-str">"Visible cost savings in the first month"</span>,
+    <span class="json-key">"cta_url"</span>: <span class="json-str">"/start"</span>
+  }
+]</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 04: intents -->
+      <div class="block-card" id="card-intents" style="scroll-margin-top:80px;" id="intents">
+        <div class="block-header" onclick="toggleBlock('card-intents')">
+          <span class="block-key">"intents"</span>
+          <span class="block-name">Intents</span>
+          <span class="block-tag tag-required">Required</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Declares what modes of interaction this site can support. The interpreter reads the visitor's likely intent (explore, buy, get support, read) and generates an experience tuned to that mode.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"intents"</span>: [
+  {
+    <span class="json-key">"type"</span>: <span class="json-str">"explore"</span>,
+    <span class="json-key">"description"</span>: <span class="json-str">"Visitor doesn't know us. Needs to understand what we do and why it matters."</span>,
+    <span class="json-key">"priority_content"</span>: [<span class="json-str">"hero"</span>, <span class="json-str">"key_benefits"</span>, <span class="json-str">"social_proof"</span>]
+  },
+  {
+    <span class="json-key">"type"</span>: <span class="json-str">"buy"</span>,
+    <span class="json-key">"description"</span>: <span class="json-str">"Visitor is ready to purchase or sign up. Reduce friction."</span>,
+    <span class="json-key">"priority_content"</span>: [<span class="json-str">"pricing"</span>, <span class="json-str">"cta"</span>, <span class="json-str">"trust_signals"</span>]
+  },
+  {
+    <span class="json-key">"type"</span>: <span class="json-str">"support"</span>,
+    <span class="json-key">"description"</span>: <span class="json-str">"Existing customer needs help."</span>,
+    <span class="json-key">"priority_content"</span>: [<span class="json-str">"documentation"</span>, <span class="json-str">"contact"</span>]
+  }
+]</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 05: agent -->
+      <div class="block-card" id="card-agent" style="scroll-margin-top:80px;" id="agent">
+        <div class="block-header" onclick="toggleBlock('card-agent')">
+          <span class="block-key">"agent"</span>
+          <span class="block-name">Agent</span>
+          <span class="block-tag tag-required">Required</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Declares whether an AI agent is available, its capabilities, and any constraints. This is the block that activates the interpreter — without it, the file is informational only.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"agent"</span>: {
+  <span class="json-key">"enabled"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"version"</span>: <span class="json-str">"1.0"</span>,
+  <span class="json-key">"capabilities"</span>: [
+    <span class="json-str">"generate_personalised_experience"</span>,
+    <span class="json-str">"answer_product_questions"</span>,
+    <span class="json-str">"route_to_support"</span>
+  ],
+  <span class="json-key">"limitations"</span>: [
+    <span class="json-str">"cannot process payments"</span>,
+    <span class="json-str">"cannot access account data"</span>
+  ],
+  <span class="json-key">"handoff_url"</span>: <span class="json-str">"/contact"</span>
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 06: brand -->
+      <div class="block-card" id="card-brand" style="scroll-margin-top:80px;" id="brand">
+        <div class="block-header" onclick="toggleBlock('card-brand')">
+          <span class="block-key">"brand"</span>
+          <span class="block-name">Brand Assets</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Visual identity assets. Allows the interpreter to generate experiences that are visually consistent with the brand, even when building layouts from scratch.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"brand"</span>: {
+  <span class="json-key">"logo_url"</span>: <span class="json-str">"https://yourdomain.com/logo.svg"</span>,
+  <span class="json-key">"logo_dark_url"</span>: <span class="json-str">"https://yourdomain.com/logo-dark.svg"</span>,
+  <span class="json-key">"colors"</span>: {
+    <span class="json-key">"primary"</span>: <span class="json-str">"#1A6B3C"</span>,
+    <span class="json-key">"secondary"</span>: <span class="json-str">"#F0F7F4"</span>,
+    <span class="json-key">"accent"</span>: <span class="json-str">"#E8B84B"</span>
+  },
+  <span class="json-key">"fonts"</span>: {
+    <span class="json-key">"headline"</span>: <span class="json-str">"Syne"</span>,
+    <span class="json-key">"body"</span>: <span class="json-str">"EB Garamond"</span>
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 07: contact -->
+      <div class="block-card" id="card-contact" style="scroll-margin-top:80px;" id="contact">
+        <div class="block-header" onclick="toggleBlock('card-contact')">
+          <span class="block-key">"contact"</span>
+          <span class="block-name">Contact</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Contact information and location data. Used when a visitor explicitly asks how to reach the organisation, or when intent detection suggests support mode.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"contact"</span>: {
+  <span class="json-key">"email"</span>: <span class="json-str">"hello@yourdomain.com"</span>,
+  <span class="json-key">"phone"</span>: <span class="json-str">"+34 900 000 000"</span>,
+  <span class="json-key">"address"</span>: <span class="json-str">"Calle Mayor 1, Madrid, Spain"</span>,
+  <span class="json-key">"support_url"</span>: <span class="json-str">"/help"</span>,
+  <span class="json-key">"social"</span>: {
+    <span class="json-key">"linkedin"</span>: <span class="json-str">"https://linkedin.com/company/yourco"</span>,
+    <span class="json-key">"twitter"</span>: <span class="json-str">"https://twitter.com/yourco"</span>
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 08: styles -->
+      <div class="block-card" id="card-styles" style="scroll-margin-top:80px;" id="styles">
+        <div class="block-header" onclick="toggleBlock('card-styles')">
+          <span class="block-key">"styles"</span>
+          <span class="block-name">Visual Styles</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Design preferences and constraints for generated interfaces. Think of it as a brief to the interpreter's design layer.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"styles"</span>: {
+  <span class="json-key">"aesthetic"</span>: <span class="json-str">"clean, data-driven, trustworthy"</span>,
+  <span class="json-key">"layout_preference"</span>: <span class="json-str">"editorial grid, generous whitespace"</span>,
+  <span class="json-key">"imagery_style"</span>: <span class="json-str">"real photography, no stock illustrations"</span>,
+  <span class="json-key">"dark_mode"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"animation_level"</span>: <span class="json-str">"subtle"</span>
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 09: mission -->
+      <div class="block-card" id="card-mission" style="scroll-margin-top:80px;" id="mission">
+        <div class="block-header" onclick="toggleBlock('card-mission')">
+          <span class="block-key">"mission"</span>
+          <span class="block-name">Mission</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">The deeper purpose behind the organisation. Used when a visitor is evaluating whether to trust or join the company, not just buy from it.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"mission"</span>: {
+  <span class="json-key">"statement"</span>: <span class="json-str">"Make energy intelligence accessible to every business, not just enterprises."</span>,
+  <span class="json-key">"problem_solved"</span>: <span class="json-str">"SMEs pay up to 30% more for energy because they lack the data to negotiate and optimise."</span>,
+  <span class="json-key">"impact"</span>: <span class="json-str">"Every customer reduces their carbon footprint as a direct consequence of reducing waste."</span>
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 10: goals -->
+      <div class="block-card" id="card-goals" style="scroll-margin-top:80px;" id="goals">
+        <div class="block-header" onclick="toggleBlock('card-goals')">
+          <span class="block-key">"goals"</span>
+          <span class="block-name">Business Goals</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">What the site is trying to achieve commercially. Helps the interpreter understand what a successful visit looks like and optimise the experience accordingly.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"goals"</span>: {
+  <span class="json-key">"primary"</span>: <span class="json-str">"free trial signup"</span>,
+  <span class="json-key">"secondary"</span>: [<span class="json-str">"demo request"</span>, <span class="json-str">"newsletter subscription"</span>],
+  <span class="json-key">"kpis"</span>: [<span class="json-str">"trial_signup_rate"</span>, <span class="json-str">"demo_completion_rate"</span>],
+  <span class="json-key">"avoid"</span>: [<span class="json-str">"high bounce without interaction"</span>, <span class="json-str">"support overload"</span>]
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 11: narrative -->
+      <div class="block-card" id="card-narrative" style="scroll-margin-top:80px;" id="narrative">
+        <div class="block-header" onclick="toggleBlock('card-narrative')">
+          <span class="block-key">"narrative"</span>
+          <span class="block-name">Narrative</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">The origin story and key messages. Gives the interpreter raw material for storytelling — the kind of copy that builds trust and resonance before a product pitch.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"narrative"</span>: {
+  <span class="json-key">"origin"</span>: <span class="json-str">"Founded after discovering that a mid-sized factory was paying triple per kWh versus its large competitors — simply because it lacked data."</span>,
+  <span class="json-key">"key_messages"</span>: [
+    <span class="json-str">"Energy data should be democratised"</span>,
+    <span class="json-str">"The best sustainability is the one you can measure"</span>,
+    <span class="json-str">"Small businesses deserve enterprise-grade tools"</span>
+  ],
+  <span class="json-key">"approved_metaphors"</span>: [<span class="json-str">"energy as a language"</span>, <span class="json-str">"the meter as a compass"</span>],
+  <span class="json-key">"forbidden_metaphors"</span>: [<span class="json-str">"revolution"</span>, <span class="json-str">"disruptive"</span>, <span class="json-str">"game-changer"</span>]
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 12: segments -->
+      <div class="block-card" id="card-segments" style="scroll-margin-top:80px;" id="segments">
+        <div class="block-header" onclick="toggleBlock('card-segments')">
+          <span class="block-key">"segments"</span>
+          <span class="block-name">Audience Segments</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Named audience profiles the interpreter can target. When combined with visitor context, this is what enables true personalisation — not just adaptive copy, but adaptive logic.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"segments"</span>: [
+  {
+    <span class="json-key">"id"</span>: <span class="json-str">"ops-manager"</span>,
+    <span class="json-key">"description"</span>: <span class="json-str">"Operations or facilities manager. Practical. Responsible for costs. Sceptical of tech that adds complexity."</span>,
+    <span class="json-key">"priority_message"</span>: <span class="json-str">"Save time and money with zero technical overhead."</span>,
+    <span class="json-key">"avoid"</span>: [<span class="json-str">"API references"</span>, <span class="json-str">"technical architecture"</span>]
+  },
+  {
+    <span class="json-key">"id"</span>: <span class="json-str">"cto"</span>,
+    <span class="json-key">"description"</span>: <span class="json-str">"Technical decision-maker. Evaluates integration complexity, data reliability, security."</span>,
+    <span class="json-key">"priority_message"</span>: <span class="json-str">"REST API, GDPR compliant, ISO 27001 certified."</span>,
+    <span class="json-key">"avoid"</span>: [<span class="json-str">"vague claims"</span>, <span class="json-str">"marketing language"</span>]
+  }
+]</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 13: legal -->
+      <div class="block-card" id="card-legal" style="scroll-margin-top:80px;" id="legal">
+        <div class="block-header" onclick="toggleBlock('card-legal')">
+          <span class="block-key">"legal"</span>
+          <span class="block-name">Legal</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Compliance constraints for generated content. The interpreter must never generate copy that contradicts these declarations.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"legal"</span>: {
+  <span class="json-key">"jurisdiction"</span>: <span class="json-str">"Spain / EU"</span>,
+  <span class="json-key">"certifications"</span>: [<span class="json-str">"GDPR compliant"</span>, <span class="json-str">"ISO 27001"</span>],
+  <span class="json-key">"disclaimers_required"</span>: [<span class="json-str">"energy savings may vary by installation"</span>],
+  <span class="json-key">"prohibited_claims"</span>: [
+    <span class="json-str">"guaranteed ROI"</span>,
+    <span class="json-str">"government subsidies without verification"</span>
+  ],
+  <span class="json-key">"data_processing"</span>: <span class="json-str">"EU servers only. No data sold to third parties."</span>
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 14: content_governance -->
+      <div class="block-card" id="card-content_governance" style="scroll-margin-top:80px;" id="content_governance">
+        <div class="block-header" onclick="toggleBlock('card-content_governance')">
+          <span class="block-key">"content_governance"</span>
+          <span class="block-name">Content Governance</span>
+          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-chevron">▾</span>
+        </div>
+        <div class="block-body">
+          <p class="block-desc">Rules governing what the interpreter can and cannot generate. The last line of editorial control — ensures no generated experience diverges from brand, values, or legal constraints.</p>
+          <div class="json-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><span class="json-key">"content_governance"</span>: {
+  <span class="json-key">"can_generate"</span>: [
+    <span class="json-str">"product descriptions"</span>,
+    <span class="json-str">"explainer copy"</span>,
+    <span class="json-str">"CTAs"</span>,
+    <span class="json-str">"FAQs"</span>
+  ],
+  <span class="json-key">"cannot_generate"</span>: [
+    <span class="json-str">"pricing without approval"</span>,
+    <span class="json-str">"competitor comparisons"</span>,
+    <span class="json-str">"testimonials not in source data"</span>
+  ],
+  <span class="json-key">"human_review_required"</span>: [<span class="json-str">"legal pages"</span>, <span class="json-str">"press releases"</span>],
+  <span class="json-key">"update_frequency"</span>: <span class="json-str">"monthly"</span>
+}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL EXAMPLE -->
+    <section class="spec-section" id="full-example">
+      <p class="spec-section-title">Full example</p>
+      <p style="font-family:'EB Garamond',serif; font-size:18px; line-height:1.65; color:var(--ink-2); margin-bottom:16px;">
+        A minimal valid <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> includes the five required blocks. Optional blocks can be added as the protocol matures.
+      </p>
+      <div class="full-example">
+        <button class="copy-btn" onclick="copyCode(this)">Copy all</button>
+        <pre>{
+  <span class="json-key">"protocol"</span>: <span class="json-str">"liquid-web"</span>,
+  <span class="json-key">"version"</span>: <span class="json-str">"1.0"</span>,
+
+  <span class="json-key">"identity"</span>: {
+    <span class="json-key">"name"</span>: <span class="json-str">"Econecta"</span>,
+    <span class="json-key">"type"</span>: <span class="json-str">"SaaS / B2B"</span>,
+    <span class="json-key">"tagline"</span>: <span class="json-str">"Energy intelligence for every business"</span>,
+    <span class="json-key">"description"</span>: <span class="json-str">"Platform that helps SMEs understand, reduce and optimise their energy consumption."</span>,
+    <span class="json-key">"language_default"</span>: <span class="json-str">"es"</span>
+  },
+
+  <span class="json-key">"voice"</span>: {
+    <span class="json-key">"tone"</span>: [<span class="json-str">"clear"</span>, <span class="json-str">"direct"</span>, <span class="json-str">"expert without being distant"</span>],
+    <span class="json-key">"formality"</span>: <span class="json-str">"professional-relaxed"</span>,
+    <span class="json-key">"avoid"</span>: [<span class="json-str">"corporate jargon"</span>, <span class="json-str">"buzzwords"</span>]
+  },
+
+  <span class="json-key">"products"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-str">"basic"</span>,
+      <span class="json-key">"name"</span>: <span class="json-str">"Econecta Basic"</span>,
+      <span class="json-key">"description"</span>: <span class="json-str">"Real-time energy monitoring for businesses under 50 employees"</span>,
+      <span class="json-key">"price_from"</span>: <span class="json-num">49</span>,
+      <span class="json-key">"currency"</span>: <span class="json-str">"EUR"</span>,
+      <span class="json-key">"cta_url"</span>: <span class="json-str">"/start"</span>
+    }
+  ],
+
+  <span class="json-key">"intents"</span>: [
+    { <span class="json-key">"type"</span>: <span class="json-str">"explore"</span>, <span class="json-key">"priority_content"</span>: [<span class="json-str">"hero"</span>, <span class="json-str">"benefits"</span>] },
+    { <span class="json-key">"type"</span>: <span class="json-str">"buy"</span>, <span class="json-key">"priority_content"</span>: [<span class="json-str">"pricing"</span>, <span class="json-str">"cta"</span>] }
+  ],
+
+  <span class="json-key">"agent"</span>: {
+    <span class="json-key">"enabled"</span>: <span class="json-bool">true</span>,
+    <span class="json-key">"version"</span>: <span class="json-str">"1.0"</span>,
+    <span class="json-key">"capabilities"</span>: [<span class="json-str">"generate_experience"</span>, <span class="json-str">"answer_questions"</span>],
+    <span class="json-key">"handoff_url"</span>: <span class="json-str">"/contact"</span>
+  }
+}</pre>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleBlock(id) {
+  const card = document.getElementById(id);
+  const body = card.querySelector('.block-body');
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+function copyCode(btn) {
+  const pre = btn.parentElement.querySelector('pre');
+  const text = pre ? pre.innerText : btn.closest('.full-example').querySelector('pre').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1800);
+  });
+}
+
+// Sidebar active state on scroll
+const sections = document.querySelectorAll('.block-card, .spec-section');
+const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      sidebarLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-56px 0px -60% 0px' });
+
+document.querySelectorAll('[id]').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
