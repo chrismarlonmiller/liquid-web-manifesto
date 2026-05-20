@@ -645,6 +645,46 @@ body::after {
       <p style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-3); margin-top:16px; line-height:1.6;">
         The file must be accessible at <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">https://yourdomain.com/agent.json</code> with no authentication. Served as <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">application/json</code>.
       </p>
+
+      <!-- META TAG BLOCK -->
+      <div class="placement-block" style="margin-top:20px;">
+        <p class="placement-title">Declare it in your HTML</p>
+        <p style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-2); line-height:1.65; margin-bottom:16px;">
+          Optionally, add a <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-3); padding:2px 6px; border-radius:2px;">&lt;meta&gt;</code> tag inside the <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-3); padding:2px 6px; border-radius:2px;">&lt;head&gt;</code> of each page. This lets interpreters discover the protocol without relying solely on file conventions — and signals intent to any agent that reads the page source directly.
+        </p>
+        <div class="json-block" style="background:var(--ink); border-radius:2px; padding:20px 24px; position:relative;">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <pre style="font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.75; color:rgba(255,255,255,0.75); white-space:pre;"><span style="color:rgba(255,255,255,0.3);">&lt;!-- Inside &lt;head&gt; --&gt;</span>
+<span style="color:#7ecfff;">&lt;meta</span> <span style="color:#ffd580;">name</span>=<span style="color:#a8e6a8;">"liquid-web-agent"</span>
+      <span style="color:#ffd580;">content</span>=<span style="color:#a8e6a8;">"src=/agent.json; version=1.0"</span><span style="color:#7ecfff;">&gt;</span></pre>
+        </div>
+        <table class="fields-table" style="margin-top:16px;">
+          <thead>
+            <tr><th>Attribute</th><th>Value</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>name</td>
+              <td><code style="font-family:'JetBrains Mono',monospace; font-size:11px;">liquid-web-agent</code></td>
+              <td>Fixed identifier for the protocol. Interpreters scan for this name.</td>
+            </tr>
+            <tr>
+              <td>content · src</td>
+              <td><code style="font-family:'JetBrains Mono',monospace; font-size:11px;">/agent.json</code></td>
+              <td>Path to the agent.json file. Can be absolute or root-relative.</td>
+            </tr>
+            <tr>
+              <td>content · version</td>
+              <td><code style="font-family:'JetBrains Mono',monospace; font-size:11px;">1.0</code></td>
+              <td>Protocol version the site declares support for.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="font-family:'EB Garamond',serif; font-size:16px; color:var(--ink-4); margin-top:14px; line-height:1.6; font-style:italic;">
+        The meta tag is optional but recommended. It follows the same convention as <code style="font-family:'JetBrains Mono',monospace; font-size:12px; font-style:normal;">&lt;meta name="generator"&gt;</code> or OpenSearch descriptors — a machine-readable hint embedded directly in the page.
+      </p>
     </section>
 
     <!-- BLOCK 01: identity -->
