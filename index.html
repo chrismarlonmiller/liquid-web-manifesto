@@ -633,10 +633,9 @@
 <header class="site-header">
   <a href="#" class="header-logo">Liquid<span>Web</span> Protocol</a>
   <nav style="display:flex; align-items:center; gap:28px;">
-    <a href="index.html" style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); text-decoration:none;">Manifesto</a>
+    <a href="index.html" id="nav-manifesto" style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); text-decoration:none;"></a>
     <a href="spec.html" style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-3); text-decoration:none;">agent.json</a>
-   <a href="faq.html" style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-3); text-decoration:none;">FAQ</a>
-   <a href="faq.html" style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-3); text-decoration:none;">Preguntas</a>
+    <a href="faq.html" id="nav-faq" style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-3); text-decoration:none;"></a>
   </nav>
   <div class="lang-toggle">
     <button class="lang-btn active" id="btn-es" onclick="showLang('es')">ES</button>
@@ -937,6 +936,8 @@
 
 <script>
 function showLang(lang) {
+  document.getElementById('nav-manifesto').textContent = lang === 'es' ? 'Manifiesto' : 'Manifesto';
+  document.getElementById('nav-faq').textContent = lang === 'es' ? 'Preguntas' : 'FAQ';
   document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
   document.getElementById('lang-' + lang).classList.add('visible');
   document.getElementById('hero-es').style.display = lang === 'es' ? '' : 'none';
@@ -945,7 +946,6 @@ function showLang(lang) {
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
 }
-
 document.addEventListener('DOMContentLoaded', () => {
   const userLang = navigator.language?.startsWith('es') ? 'es' : 'en';
   showLang(userLang);
