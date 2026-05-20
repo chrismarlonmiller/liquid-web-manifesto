@@ -550,26 +550,72 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .block-chevron { transition: none; }
 }
+
+/* ── LANG TOGGLE ── */
+.lang-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--paper-2);
+  border-radius: 20px;
+  padding: 3px;
+  border: 1px solid var(--rule-strong);
+}
+.lang-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 5px 14px;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.lang-btn.active { background: var(--ink); color: var(--paper); }
+
+/* ── I18N ── */
+.lang-en .t-es, .lang-es .t-en { display: none; }
+.lang-en .t-en, .lang-es .t-es { display: revert; }
+span.t-en, span.t-es, em.t-en, em.t-es { display: none; }
+.lang-en span.t-en, .lang-en em.t-en { display: inline; }
+.lang-es span.t-es, .lang-es em.t-es { display: inline; }
+li.t-en, li.t-es { display: none; }
+.lang-en li.t-en, .lang-es li.t-es { display: list-item; }
+th.t-en, th.t-es, td.t-en, td.t-es { display: none; }
+.lang-en th.t-en, .lang-en td.t-en { display: table-cell; }
+.lang-es th.t-es, .lang-es td.t-es { display: table-cell; }
 </style>
 </head>
-<body>
+<body class="lang-en">
 
 <header class="site-header">
   <a href="index.html" class="header-logo">Liquid<span>Web</span> Protocol</a>
   <nav class="header-nav">
-    <a href="index.html" class="nav-link">Manifesto</a>
+    <a href="index.html" class="nav-link t-en">Manifesto</a>
+    <a href="index.html" class="nav-link t-es">Manifiesto</a>
     <a href="spec.html" class="nav-link active">agent.json</a>
   </nav>
+  <div class="lang-toggle">
+    <button class="lang-btn" id="btn-es" onclick="showLang('es')">ES</button>
+    <button class="lang-btn active" id="btn-en" onclick="showLang('en')">EN</button>
+  </div>
 </header>
 
 <!-- ── PAGE INTRO ── -->
 <div class="page-intro">
-  <p class="page-eyebrow">Protocol Specification · Open Standard · v1.0</p>
-  <h1 class="page-headline">The <em>agent.json</em><br>specification</h1>
-  <p class="page-sub">A structured file published at the root of any domain. It declares the identity, voice, and intent of a site — so agents can generate the right experience for each individual visitor.</p>
+  <p class="page-eyebrow t-en">Protocol Specification · Open Standard · v1.0</p>
+  <p class="page-eyebrow t-es">Especificación del protocolo · Estándar abierto · v1.0</p>
+  <h1 class="page-headline">
+    <span class="t-en">The <em>agent.json</em><br>specification</span>
+    <span class="t-es">La especificación<br><em>agent.json</em></span>
+  </h1>
+  <p class="page-sub t-en">A structured file published at the root of any domain. It declares the identity, voice, and intent of a site — so agents can generate the right experience for each individual visitor.</p>
+  <p class="page-sub t-es">Un archivo estructurado publicado en la raíz de cualquier dominio. Declara la identidad, la voz y la intención de un sitio — para que los agentes puedan generar la experiencia adecuada para cada visitante individual.</p>
   <div class="version-badge">
     <span class="version-dot"></span>
-    v1.0-draft · May 2026 · liquidwebprotocol.com
+    v1.0-draft · Mayo 2026 · liquidwebprotocol.com
   </div>
 </div>
 
@@ -578,10 +624,13 @@ body::after {
 
   <!-- SIDEBAR -->
   <aside class="spec-sidebar">
-    <p class="sidebar-title">Contents</p>
+    <p class="sidebar-title t-en">Contents</p>
+    <p class="sidebar-title t-es">Contenido</p>
     <ul class="sidebar-nav">
-      <li><a href="#overview" class="active">Overview</a></li>
-      <li><a href="#placement">File placement</a></li>
+      <li><a href="#overview" class="active t-en">Overview</a></li>
+      <li><a href="#overview" class="active t-es">Resumen</a></li>
+      <li><a href="#placement" class="t-en">File placement</a></li>
+      <li><a href="#placement" class="t-es">Ubicación del archivo</a></li>
       <div class="sidebar-divider"></div>
       <li><a href="#identity">01 · identity</a></li>
       <li><a href="#voice">02 · voice</a></li>
@@ -598,7 +647,8 @@ body::after {
       <li><a href="#legal">13 · legal</a></li>
       <li><a href="#content_governance">14 · content_governance</a></li>
       <div class="sidebar-divider"></div>
-      <li><a href="#full-example">Full example</a></li>
+      <li><a href="#full-example" class="t-en">Full example</a></li>
+      <li><a href="#full-example" class="t-es">Ejemplo completo</a></li>
     </ul>
   </aside>
 
@@ -607,50 +657,69 @@ body::after {
 
     <!-- OVERVIEW -->
     <section class="spec-section" id="overview">
-      <p class="spec-section-title">Overview</p>
+      <p class="spec-section-title t-en">Overview</p>
+      <p class="spec-section-title t-es">Resumen</p>
       <div class="overview-grid">
         <div class="overview-card">
           <div class="overview-num">14</div>
-          <div class="overview-label">Declarative blocks</div>
+          <div class="overview-label t-en">Declarative blocks</div>
+          <div class="overview-label t-es">Bloques declarativos</div>
         </div>
         <div class="overview-card">
           <div class="overview-num">5</div>
-          <div class="overview-label">Required blocks</div>
+          <div class="overview-label t-en">Required blocks</div>
+          <div class="overview-label t-es">Bloques obligatorios</div>
         </div>
         <div class="overview-card">
           <div class="overview-num">JSON</div>
-          <div class="overview-label">Standard format</div>
+          <div class="overview-label t-en">Standard format</div>
+          <div class="overview-label t-es">Formato estándar</div>
         </div>
       </div>
-      <p style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2); margin-bottom:1rem;">
+      <p class="t-en" style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2); margin-bottom:1rem;">
         <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">agent.json</code> is the machine-readable heart of the Liquid Web Protocol. Like <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">robots.txt</code> tells crawlers what to index, <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">agent.json</code> tells interpreters how to generate a personalised experience from first principles.
       </p>
-      <p style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2);">
+      <p class="t-es" style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2); margin-bottom:1rem;">
+        <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">agent.json</code> es el núcleo legible por máquinas del Liquid Web Protocol. Igual que <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">robots.txt</code> indica a los rastreadores qué indexar, <code style="font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--paper-2); padding:2px 7px; border-radius:2px; border:1px solid var(--rule-strong);">agent.json</code> indica a los intérpretes cómo generar una experiencia personalizada desde cero.
+      </p>
+      <p class="t-en" style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2);">
         It separates what a site <em>is</em> from how it <em>appears</em> — the same leap CSS made in 1996, applied to the entire web experience.
+      </p>
+      <p class="t-es" style="font-family:'EB Garamond',serif; font-size:19px; line-height:1.7; color:var(--ink-2);">
+        Separa lo que un sitio <em>es</em> de cómo <em>aparece</em> — el mismo salto que dio CSS en 1996, aplicado a toda la experiencia web.
       </p>
     </section>
 
     <!-- PLACEMENT -->
     <section class="spec-section" id="placement">
-      <p class="spec-section-title">File placement</p>
+      <p class="spec-section-title t-en">File placement</p>
+      <p class="spec-section-title t-es">Ubicación del archivo</p>
       <div class="placement-block">
-        <p class="placement-title">Where to publish it</p>
+        <p class="placement-title t-en">Where to publish it</p>
+        <p class="placement-title t-es">Dónde publicarlo</p>
         <ul class="file-list">
           <li><span class="file-icon">📄</span> robots.txt</li>
           <li><span class="file-icon">📄</span> sitemap.xml</li>
-          <li><span class="file-icon">📄</span> <span class="file-highlight">agent.json</span> &nbsp;← publish here</li>
+          <li><span class="file-icon">📄</span> <span class="file-highlight">agent.json</span> &nbsp;<span class="t-en">← publish here</span><span class="t-es">← publicar aquí</span></li>
           <li><span class="file-icon">📁</span> index.html</li>
         </ul>
       </div>
-      <p style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-3); margin-top:16px; line-height:1.6;">
+      <p class="t-en" style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-3); margin-top:16px; line-height:1.6;">
         The file must be accessible at <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">https://yourdomain.com/agent.json</code> with no authentication. Served as <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">application/json</code>.
+      </p>
+      <p class="t-es" style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-3); margin-top:16px; line-height:1.6;">
+        El archivo debe ser accesible en <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">https://tudominio.com/agent.json</code> sin autenticación. Servido como <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">application/json</code>.
       </p>
 
       <!-- META TAG BLOCK -->
       <div class="placement-block" style="margin-top:20px;">
-        <p class="placement-title">Declare it in your HTML</p>
-        <p style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-2); line-height:1.65; margin-bottom:16px;">
+        <p class="placement-title t-en">Declare it in your HTML</p>
+        <p class="placement-title t-es">Declárado en tu HTML</p>
+        <p class="t-en" style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-2); line-height:1.65; margin-bottom:16px;">
           Optionally, add a <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-3); padding:2px 6px; border-radius:2px;">&lt;meta&gt;</code> tag inside the <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-3); padding:2px 6px; border-radius:2px;">&lt;head&gt;</code> of each page. This lets interpreters discover the protocol without relying solely on file conventions — and signals intent to any agent that reads the page source directly.
+        </p>
+        <p class="t-es" style="font-family:'EB Garamond',serif; font-size:17px; color:var(--ink-2); line-height:1.65; margin-bottom:16px;">
+          Opcionalmente, añade un tag <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-3); padding:2px 6px; border-radius:2px;">&lt;meta&gt;</code> dentro del <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-3); padding:2px 6px; border-radius:2px;">&lt;head&gt;</code> de cada página. Esto permite que los intérpretes descubran el protocolo sin depender únicamente de las convenciones de archivo — y señala la intención a cualquier agente que lea el código fuente directamente.
         </p>
         <div class="json-block" style="background:var(--ink); border-radius:2px; padding:20px 24px; position:relative;">
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
@@ -660,46 +729,61 @@ body::after {
         </div>
         <table class="fields-table" style="margin-top:16px;">
           <thead>
-            <tr><th>Attribute</th><th>Value</th><th>Description</th></tr>
+            <tr>
+              <th>Attribute</th>
+              <th>Value</th>
+              <th class="t-en">Description</th>
+              <th class="t-es">Descripción</th>
+            </tr>
           </thead>
           <tbody>
             <tr>
               <td>name</td>
               <td><code style="font-family:'JetBrains Mono',monospace; font-size:11px;">liquid-web-agent</code></td>
-              <td>Fixed identifier for the protocol. Interpreters scan for this name.</td>
+              <td class="t-en">Fixed identifier for the protocol. Interpreters scan for this name.</td>
+              <td class="t-es">Identificador fijo del protocolo. Los intérpretes buscan este nombre.</td>
             </tr>
             <tr>
               <td>content · src</td>
               <td><code style="font-family:'JetBrains Mono',monospace; font-size:11px;">/agent.json</code></td>
-              <td>Path to the agent.json file. Can be absolute or root-relative.</td>
+              <td class="t-en">Path to the agent.json file. Can be absolute or root-relative.</td>
+              <td class="t-es">Ruta al archivo agent.json. Puede ser absoluta o relativa a la raíz.</td>
             </tr>
             <tr>
               <td>content · version</td>
               <td><code style="font-family:'JetBrains Mono',monospace; font-size:11px;">1.0</code></td>
-              <td>Protocol version the site declares support for.</td>
+              <td class="t-en">Protocol version the site declares support for.</td>
+              <td class="t-es">Versión del protocolo que el sitio declara soportar.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <p style="font-family:'EB Garamond',serif; font-size:16px; color:var(--ink-4); margin-top:14px; line-height:1.6; font-style:italic;">
+      <p class="t-en" style="font-family:'EB Garamond',serif; font-size:16px; color:var(--ink-4); margin-top:14px; line-height:1.6; font-style:italic;">
         The meta tag is optional but recommended. It follows the same convention as <code style="font-family:'JetBrains Mono',monospace; font-size:12px; font-style:normal;">&lt;meta name="generator"&gt;</code> or OpenSearch descriptors — a machine-readable hint embedded directly in the page.
+      </p>
+      <p class="t-es" style="font-family:'EB Garamond',serif; font-size:16px; color:var(--ink-4); margin-top:14px; line-height:1.6; font-style:italic;">
+        El meta tag es opcional pero recomendado. Sigue la misma convención que <code style="font-family:'JetBrains Mono',monospace; font-size:12px; font-style:normal;">&lt;meta name="generator"&gt;</code> o los descriptores OpenSearch — una pista legible por máquinas integrada directamente en la página.
       </p>
     </section>
 
     <!-- BLOCK 01: identity -->
     <section class="spec-section" id="identity">
-      <p class="spec-section-title">Blocks</p>
+      <p class="spec-section-title t-en">Blocks</p>
+      <p class="spec-section-title t-es">Bloques</p>
 
       <div class="block-card open" id="card-identity">
         <div class="block-header" onclick="toggleBlock('card-identity')">
           <span class="block-key">"identity"</span>
-          <span class="block-name">Identity</span>
-          <span class="block-tag tag-required">Required</span>
+          <span class="block-name t-en">Identity</span>
+          <span class="block-name t-es">Identidad</span>
+          <span class="block-tag tag-required t-en">Required</span>
+          <span class="block-tag tag-required t-es">Obligatorio</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body open">
-          <p class="block-desc">Declares who the organisation is. The foundation of every generated experience. An interpreter reads this first to understand the entity behind the site.</p>
+          <p class="block-desc t-en">Declares who the organisation is. The foundation of every generated experience. An interpreter reads this first to understand the entity behind the site.</p>
+          <p class="block-desc t-es">Declara quién es la organización. La base de toda experiencia generada. Un intérprete lee esto primero para entender la entidad detrás del sitio.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"identity"</span>: {
@@ -714,14 +798,45 @@ body::after {
 }</pre>
           </div>
           <table class="fields-table">
-            <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th class="t-en">Description</th>
+                <th class="t-es">Descripción</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td>name</td><td>string</td><td>Legal or commercial name of the organisation</td></tr>
-              <tr><td>type</td><td>string</td><td>Business model descriptor (SaaS, e-commerce, NGO, etc.)</td></tr>
-              <tr><td>category</td><td>string</td><td>Industry or vertical</td></tr>
-              <tr><td>tagline</td><td>string</td><td>Short positioning line — used in generated headlines</td></tr>
-              <tr><td>description</td><td>string</td><td>1–3 sentence explanation of what the org does</td></tr>
-              <tr><td>language_default</td><td>string</td><td>ISO 639-1 code of the primary language</td></tr>
+              <tr>
+                <td>name</td><td>string</td>
+                <td class="t-en">Legal or commercial name of the organisation</td>
+                <td class="t-es">Nombre legal o comercial de la organización</td>
+              </tr>
+              <tr>
+                <td>type</td><td>string</td>
+                <td class="t-en">Business model descriptor (SaaS, e-commerce, NGO, etc.)</td>
+                <td class="t-es">Descriptor del modelo de negocio (SaaS, e-commerce, ONG, etc.)</td>
+              </tr>
+              <tr>
+                <td>category</td><td>string</td>
+                <td class="t-en">Industry or vertical</td>
+                <td class="t-es">Industria o sector</td>
+              </tr>
+              <tr>
+                <td>tagline</td><td>string</td>
+                <td class="t-en">Short positioning line — used in generated headlines</td>
+                <td class="t-es">Línea de posicionamiento corta — usada en titulares generados</td>
+              </tr>
+              <tr>
+                <td>description</td><td>string</td>
+                <td class="t-en">1–3 sentence explanation of what the org does</td>
+                <td class="t-es">Explicación de 1–3 frases de lo que hace la organización</td>
+              </tr>
+              <tr>
+                <td>language_default</td><td>string</td>
+                <td class="t-en">ISO 639-1 code of the primary language</td>
+                <td class="t-es">Código ISO 639-1 del idioma principal</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -731,12 +846,15 @@ body::after {
       <div class="block-card" id="card-voice" style="scroll-margin-top:80px;" id="voice">
         <div class="block-header" onclick="toggleBlock('card-voice')">
           <span class="block-key">"voice"</span>
-          <span class="block-name">Voice &amp; Tone</span>
-          <span class="block-tag tag-required">Required</span>
+          <span class="block-name t-en">Voice &amp; Tone</span>
+          <span class="block-name t-es">Voz y Tono</span>
+          <span class="block-tag tag-required t-en">Required</span>
+          <span class="block-tag tag-required t-es">Obligatorio</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Defines how the site communicates. Interpreters use this to calibrate register, complexity, and emotional temperature of every generated text element.</p>
+          <p class="block-desc t-en">Defines how the site communicates. Interpreters use this to calibrate register, complexity, and emotional temperature of every generated text element.</p>
+          <p class="block-desc t-es">Define cómo se comunica el sitio. Los intérpretes lo usan para calibrar el registro, la complejidad y la temperatura emocional de cada elemento de texto generado.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"voice"</span>: {
@@ -758,12 +876,15 @@ body::after {
       <div class="block-card" id="card-products">
         <div class="block-header" onclick="toggleBlock('card-products')">
           <span class="block-key">"products"</span>
-          <span class="block-name">Products &amp; Services</span>
-          <span class="block-tag tag-required">Required</span>
+          <span class="block-name t-en">Products &amp; Services</span>
+          <span class="block-name t-es">Productos y Servicios</span>
+          <span class="block-tag tag-required t-en">Required</span>
+          <span class="block-tag tag-required t-es">Obligatorio</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Catalogue of what the site offers. Enables interpreters to surface the right product or service based on the visitor's intent and context, without surfacing irrelevant offers.</p>
+          <p class="block-desc t-en">Catalogue of what the site offers. Enables interpreters to surface the right product or service based on the visitor's intent and context, without surfacing irrelevant offers.</p>
+          <p class="block-desc t-es">Catálogo de lo que ofrece el sitio. Permite a los intérpretes mostrar el producto o servicio adecuado según la intención y el contexto del visitante, sin mostrar ofertas irrelevantes.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"products"</span>: [
@@ -786,12 +907,15 @@ body::after {
       <div class="block-card" id="card-intents" style="scroll-margin-top:80px;" id="intents">
         <div class="block-header" onclick="toggleBlock('card-intents')">
           <span class="block-key">"intents"</span>
-          <span class="block-name">Intents</span>
-          <span class="block-tag tag-required">Required</span>
+          <span class="block-name t-en">Intents</span>
+          <span class="block-name t-es">Intenciones</span>
+          <span class="block-tag tag-required t-en">Required</span>
+          <span class="block-tag tag-required t-es">Obligatorio</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Declares what modes of interaction this site can support. The interpreter reads the visitor's likely intent (explore, buy, get support, read) and generates an experience tuned to that mode.</p>
+          <p class="block-desc t-en">Declares what modes of interaction this site can support. The interpreter reads the visitor's likely intent (explore, buy, get support, read) and generates an experience tuned to that mode.</p>
+          <p class="block-desc t-es">Declara qué modos de interacción puede soportar el sitio. El intérprete lee la intención probable del visitante (explorar, comprar, soporte, leer) y genera una experiencia adaptada a ese modo.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"intents"</span>: [
@@ -819,12 +943,15 @@ body::after {
       <div class="block-card" id="card-agent" style="scroll-margin-top:80px;" id="agent">
         <div class="block-header" onclick="toggleBlock('card-agent')">
           <span class="block-key">"agent"</span>
-          <span class="block-name">Agent</span>
-          <span class="block-tag tag-required">Required</span>
+          <span class="block-name t-en">Agent</span>
+          <span class="block-name t-es">Agente</span>
+          <span class="block-tag tag-required t-en">Required</span>
+          <span class="block-tag tag-required t-es">Obligatorio</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Declares whether an AI agent is available, its capabilities, and any constraints. This is the block that activates the interpreter — without it, the file is informational only.</p>
+          <p class="block-desc t-en">Declares whether an AI agent is available, its capabilities, and any constraints. This is the block that activates the interpreter — without it, the file is informational only.</p>
+          <p class="block-desc t-es">Declara si hay un agente de IA disponible, sus capacidades y limitaciones. Este es el bloque que activa el intérprete — sin él, el archivo es solo informativo.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"agent"</span>: {
@@ -849,12 +976,15 @@ body::after {
       <div class="block-card" id="card-brand" style="scroll-margin-top:80px;" id="brand">
         <div class="block-header" onclick="toggleBlock('card-brand')">
           <span class="block-key">"brand"</span>
-          <span class="block-name">Brand Assets</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Brand Assets</span>
+          <span class="block-name t-es">Activos de Marca</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Visual identity assets. Allows the interpreter to generate experiences that are visually consistent with the brand, even when building layouts from scratch.</p>
+          <p class="block-desc t-en">Visual identity assets. Allows the interpreter to generate experiences that are visually consistent with the brand, even when building layouts from scratch.</p>
+          <p class="block-desc t-es">Activos de identidad visual. Permite al intérprete generar experiencias visualmente coherentes con la marca, incluso al construir layouts desde cero.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"brand"</span>: {
@@ -878,12 +1008,15 @@ body::after {
       <div class="block-card" id="card-contact" style="scroll-margin-top:80px;" id="contact">
         <div class="block-header" onclick="toggleBlock('card-contact')">
           <span class="block-key">"contact"</span>
-          <span class="block-name">Contact</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Contact</span>
+          <span class="block-name t-es">Contacto</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Contact information and location data. Used when a visitor explicitly asks how to reach the organisation, or when intent detection suggests support mode.</p>
+          <p class="block-desc t-en">Contact information and location data. Used when a visitor explicitly asks how to reach the organisation, or when intent detection suggests support mode.</p>
+          <p class="block-desc t-es">Información de contacto y datos de localización. Se usa cuando un visitante pregunta explícitamente cómo contactar a la organización, o cuando la detección de intención sugiere modo soporte.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"contact"</span>: {
@@ -904,12 +1037,15 @@ body::after {
       <div class="block-card" id="card-styles" style="scroll-margin-top:80px;" id="styles">
         <div class="block-header" onclick="toggleBlock('card-styles')">
           <span class="block-key">"styles"</span>
-          <span class="block-name">Visual Styles</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Visual Styles</span>
+          <span class="block-name t-es">Estilos Visuales</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Design preferences and constraints for generated interfaces. Think of it as a brief to the interpreter's design layer.</p>
+          <p class="block-desc t-en">Design preferences and constraints for generated interfaces. Think of it as a brief to the interpreter's design layer.</p>
+          <p class="block-desc t-es">Preferencias y restricciones de diseño para las interfaces generadas. Piénsalo como un briefing para la capa de diseño del intérprete.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"styles"</span>: {
@@ -927,12 +1063,15 @@ body::after {
       <div class="block-card" id="card-mission" style="scroll-margin-top:80px;" id="mission">
         <div class="block-header" onclick="toggleBlock('card-mission')">
           <span class="block-key">"mission"</span>
-          <span class="block-name">Mission</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Mission</span>
+          <span class="block-name t-es">Misión</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">The deeper purpose behind the organisation. Used when a visitor is evaluating whether to trust or join the company, not just buy from it.</p>
+          <p class="block-desc t-en">The deeper purpose behind the organisation. Used when a visitor is evaluating whether to trust or join the company, not just buy from it.</p>
+          <p class="block-desc t-es">El propósito más profundo de la organización. Se usa cuando un visitante evalúa si confiar en la empresa o unirse a ella, no solo comprar.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"mission"</span>: {
@@ -948,12 +1087,15 @@ body::after {
       <div class="block-card" id="card-goals" style="scroll-margin-top:80px;" id="goals">
         <div class="block-header" onclick="toggleBlock('card-goals')">
           <span class="block-key">"goals"</span>
-          <span class="block-name">Business Goals</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Business Goals</span>
+          <span class="block-name t-es">Objetivos de Negocio</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">What the site is trying to achieve commercially. Helps the interpreter understand what a successful visit looks like and optimise the experience accordingly.</p>
+          <p class="block-desc t-en">What the site is trying to achieve commercially. Helps the interpreter understand what a successful visit looks like and optimise the experience accordingly.</p>
+          <p class="block-desc t-es">Lo que el sitio intenta lograr comercialmente. Ayuda al intérprete a entender cómo es una visita exitosa y optimizar la experiencia en consecuencia.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"goals"</span>: {
@@ -970,12 +1112,15 @@ body::after {
       <div class="block-card" id="card-narrative" style="scroll-margin-top:80px;" id="narrative">
         <div class="block-header" onclick="toggleBlock('card-narrative')">
           <span class="block-key">"narrative"</span>
-          <span class="block-name">Narrative</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Narrative</span>
+          <span class="block-name t-es">Narrativa</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">The origin story and key messages. Gives the interpreter raw material for storytelling — the kind of copy that builds trust and resonance before a product pitch.</p>
+          <p class="block-desc t-en">The origin story and key messages. Gives the interpreter raw material for storytelling — the kind of copy that builds trust and resonance before a product pitch.</p>
+          <p class="block-desc t-es">La historia de origen y los mensajes clave. Proporciona al intérprete material bruto para el storytelling — el tipo de copy que construye confianza y resonancia antes de presentar el producto.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"narrative"</span>: {
@@ -996,12 +1141,15 @@ body::after {
       <div class="block-card" id="card-segments" style="scroll-margin-top:80px;" id="segments">
         <div class="block-header" onclick="toggleBlock('card-segments')">
           <span class="block-key">"segments"</span>
-          <span class="block-name">Audience Segments</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Audience Segments</span>
+          <span class="block-name t-es">Segmentos de Audiencia</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Named audience profiles the interpreter can target. When combined with visitor context, this is what enables true personalisation — not just adaptive copy, but adaptive logic.</p>
+          <p class="block-desc t-en">Named audience profiles the interpreter can target. When combined with visitor context, this is what enables true personalisation — not just adaptive copy, but adaptive logic.</p>
+          <p class="block-desc t-es">Perfiles de audiencia nombrados a los que el intérprete puede dirigirse. Combinados con el contexto del visitante, son lo que permite la personalización real — no solo copy adaptativo, sino lógica adaptativa.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"segments"</span>: [
@@ -1026,12 +1174,15 @@ body::after {
       <div class="block-card" id="card-legal" style="scroll-margin-top:80px;" id="legal">
         <div class="block-header" onclick="toggleBlock('card-legal')">
           <span class="block-key">"legal"</span>
-          <span class="block-name">Legal</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Legal</span>
+          <span class="block-name t-es">Legal</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Compliance constraints for generated content. The interpreter must never generate copy that contradicts these declarations.</p>
+          <p class="block-desc t-en">Compliance constraints for generated content. The interpreter must never generate copy that contradicts these declarations.</p>
+          <p class="block-desc t-es">Restricciones de cumplimiento para el contenido generado. El intérprete no debe generar nunca copy que contradiga estas declaraciones.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"legal"</span>: {
@@ -1052,12 +1203,15 @@ body::after {
       <div class="block-card" id="card-content_governance" style="scroll-margin-top:80px;" id="content_governance">
         <div class="block-header" onclick="toggleBlock('card-content_governance')">
           <span class="block-key">"content_governance"</span>
-          <span class="block-name">Content Governance</span>
-          <span class="block-tag tag-optional">Optional</span>
+          <span class="block-name t-en">Content Governance</span>
+          <span class="block-name t-es">Gobierno de Contenido</span>
+          <span class="block-tag tag-optional t-en">Optional</span>
+          <span class="block-tag tag-optional t-es">Opcional</span>
           <span class="block-chevron">▾</span>
         </div>
         <div class="block-body">
-          <p class="block-desc">Rules governing what the interpreter can and cannot generate. The last line of editorial control — ensures no generated experience diverges from brand, values, or legal constraints.</p>
+          <p class="block-desc t-en">Rules governing what the interpreter can and cannot generate. The last line of editorial control — ensures no generated experience diverges from brand, values, or legal constraints.</p>
+          <p class="block-desc t-es">Reglas que gobiernan lo que el intérprete puede y no puede generar. La última línea de control editorial — garantiza que ninguna experiencia generada se desvíe de la marca, los valores o las restricciones legales.</p>
           <div class="json-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><span class="json-key">"content_governance"</span>: {
@@ -1082,9 +1236,13 @@ body::after {
 
     <!-- FULL EXAMPLE -->
     <section class="spec-section" id="full-example">
-      <p class="spec-section-title">Full example</p>
-      <p style="font-family:'EB Garamond',serif; font-size:18px; line-height:1.65; color:var(--ink-2); margin-bottom:16px;">
+      <p class="spec-section-title t-en">Full example</p>
+      <p class="spec-section-title t-es">Ejemplo completo</p>
+      <p class="t-en" style="font-family:'EB Garamond',serif; font-size:18px; line-height:1.65; color:var(--ink-2); margin-bottom:16px;">
         A minimal valid <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> includes the five required blocks. Optional blocks can be added as the protocol matures.
+      </p>
+      <p class="t-es" style="font-family:'EB Garamond',serif; font-size:18px; line-height:1.65; color:var(--ink-2); margin-bottom:16px;">
+        Un <code style="font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--paper-2); padding:2px 6px; border-radius:2px;">agent.json</code> mínimo válido incluye los cinco bloques obligatorios. Los bloques opcionales se pueden añadir a medida que el protocolo madura.
       </p>
       <div class="full-example">
         <button class="copy-btn" onclick="copyCode(this)">Copy all</button>
@@ -1136,6 +1294,19 @@ body::after {
 </div>
 
 <script>
+function showLang(lang) {
+  document.body.className = 'lang-' + lang;
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  localStorage.setItem('lwp-lang', lang);
+}
+
+// Restore saved language preference
+(function() {
+  const saved = localStorage.getItem('lwp-lang');
+  if (saved === 'es') showLang('es');
+})();
+
 function toggleBlock(id) {
   const card = document.getElementById(id);
   const body = card.querySelector('.block-body');
