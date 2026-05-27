@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Web Protocol — Live Demo</title>
+  <meta name="description" content="A live demonstration of a web experience generated in real time from agent.json. No pre-built pages. No variants. Just the right thing for the right person.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0d;
+      --bg2: #161614;
+      --bg3: #1e1e1b;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.13);
+      --text: #f0ede6;
+      --text2: #8a8780;
+      --text3: #4a4845;
+      --green: #3B6D11;
+      --green-light: #97C459;
+      --accent: #f0ede6;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-mono: 'DM Mono', 'Courier New', monospace;
+    }
+
+    html { background: var(--bg); color: var(--text); font-family: var(--font-mono); }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+    }
+
+    /* ── TOP NAV ── */
+    nav {
+      width: 100%;
+      padding: 18px 32px;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 12px;
+      color: var(--text2);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--text); }
+    .nav-tag {
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .nav-link {
+      font-size: 11px;
+      color: var(--text2);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .nav-link:hover { color: var(--text); }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      width: 100%;
+      max-width: 680px;
+      padding: 48px 24px 80px;
+    }
+
+    .section-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 1rem;
+    }
+
+    /* ── PHASES ── */
+    .phase { display: none; }
+    .phase.active { display: block; }
+
+    /* ── PHASE 1: BOOT ── */
+    .boot-header {
+      margin-bottom: 2.5rem;
+    }
+    .boot-header h1 {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .boot-header h1 em { font-style: italic; color: var(--text2); }
+    .boot-subtitle {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.7;
+      max-width: 460px;
+    }
+
+    .terminal {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .terminal-bar {
+      padding: 10px 14px;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #3a2020; }
+    .dot-y { background: #3a3020; }
+    .dot-g { background: #1e3a18; }
+    .terminal-url {
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: 0.02em;
+    }
+
+    .terminal-body { padding: 20px; }
+    .t-line {
+      font-size: 12px;
+      line-height: 2;
+      color: var(--text2);
+      opacity: 0;
+      transform: translateY(3px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .t-line.show { opacity: 1; transform: none; }
+    .t-line .cmd { color: var(--text3); }
+    .t-line .ok { color: var(--green-light); }
+    .t-line .val { color: var(--text); }
+    .t-line .dim { color: var(--text3); }
+    .t-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 13px;
+      background: var(--text2);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 0.9s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .boot-progress-wrap {
+      margin-top: 16px;
+      padding: 0 20px 20px;
+    }
+    .boot-progress-track {
+      height: 1px;
+      background: var(--border);
+      width: 100%;
+      overflow: hidden;
+    }
+    .boot-progress-fill {
+      height: 100%;
+      background: var(--text3);
+      width: 0%;
+      transition: width 0.35s ease;
+    }
+
+    /* ── PHASE 2: PROFILE ── */
+    .profile-intro {
+      margin-bottom: 2rem;
+    }
+    .profile-intro h2 {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .profile-intro p {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    .profile-note {
+      font-size: 10px;
+      color: var(--text3);
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .profile-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .profile-opt {
+      padding: 14px 18px;
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text2);
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .profile-opt:hover {
+      border-color: var(--border2);
+      color: var(--text);
+      background: var(--bg3);
+    }
+    .profile-opt .opt-label { display: flex; flex-direction: column; gap: 2px; }
+    .profile-opt .opt-role { font-size: 11px; color: inherit; }
+    .profile-opt .opt-desc { font-size: 11px; color: var(--text3); }
+    .profile-opt:hover .opt-desc { color: var(--text2); }
+    .profile-arrow { color: var(--text3); font-size: 16px; flex-shrink: 0; margin-left: 16px; }
+
+    /* ── PHASE 3: GENERATING ── */
+    .gen-header {
+      margin-bottom: 2rem;
+    }
+    .gen-header p {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 6px;
+    }
+
+    .gen-pipeline {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .gen-pipeline-header {
+      padding: 10px 16px;
+      border-bottom: 0.5px solid var(--border);
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+    .gen-steps-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .gen-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text3);
+      opacity: 0.3;
+      transition: opacity 0.35s ease, color 0.35s ease;
+    }
+    .gen-step.active { opacity: 1; color: var(--text2); }
+    .gen-step.done { opacity: 0.5; color: var(--text3); }
+    .gen-step-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 0.5px solid var(--border);
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .gen-step.active .gen-step-icon { border-color: var(--text2); background: var(--bg3); }
+    .gen-step.done .gen-step-icon { border-color: var(--border); background: var(--border); }
+    .gen-step-text { line-height: 1.5; }
+    .gen-step-key { color: var(--text3); font-style: italic; font-size: 11px; display: block; margin-top: 1px; }
+    .gen-step.active .gen-step-key { color: var(--text3); }
+
+    .gen-preview-box {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      min-height: 60px;
+    }
+    .skel {
+      height: 8px;
+      border-radius: 3px;
+      background: var(--bg3);
+      margin-bottom: 10px;
+      transform-origin: left;
+      transform: scaleX(0);
+      opacity: 0;
+      animation: skel-in 0.4s ease forwards;
+    }
+    @keyframes skel-in { to { transform: scaleX(1); opacity: 1; } }
+
+    /* ── PHASE 4: RESULT ── */
+    .result-topbar {
+      padding: 10px 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .result-live {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text3);
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green-light);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.75); }
+    }
+    .result-profile-badge {
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border: 0.5px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .result-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 1rem;
+    }
+
+    .result-headline {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+    }
+    .result-headline em { font-style: italic; color: var(--text2); }
+
+    .result-body {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text2);
+      max-width: 520px;
+      margin-bottom: 2rem;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .btn-primary {
+      padding: 11px 20px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-secondary {
+      padding: 11px 20px;
+      background: transparent;
+      color: var(--text2);
+      border: 0.5px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--border2); color: var(--text); }
+
+    .result-divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .result-meta-box {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 2rem;
+    }
+    .result-meta-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 10px;
+    }
+    .result-meta-row {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      line-height: 2;
+      color: var(--text3);
+    }
+    .result-meta-row .k { min-width: 130px; flex-shrink: 0; }
+    .result-meta-row .v { color: var(--text2); }
+
+    .reset-btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text3);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .reset-btn:hover { color: var(--text2); }
+    .reset-arrow { font-size: 14px; }
+
+    /* ── FOOTER ── */
+    footer {
+      width: 100%;
+      padding: 24px 32px;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .footer-note {
+      font-size: 11px;
+      color: var(--text3);
+    }
+    .footer-link {
+      font-size: 11px;
+      color: var(--text3);
+      text-decoration: none;
+    }
+    .footer-link:hover { color: var(--text2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      main { padding: 32px 16px 60px; }
+      nav { padding: 14px 16px; }
+      .nav-tag { display: none; }
+      .result-headline { font-size: 28px; }
+      .boot-header h1 { font-size: 26px; }
+      footer { padding: 18px 16px; flex-direction: column; gap: 8px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://liquidwebprotocol.com" class="nav-logo"><span>Liquid Web</span> Protocol</a>
+  <span class="nav-tag">demo · agent.json</span>
+  <a href="https://liquidwebprotocol.com" class="nav-link">← back to manifesto</a>
+</nav>
+
+<main>
+
+  <!-- PHASE 1: BOOT -->
+  <div class="phase active" id="phase-boot">
+    <div class="section-eyebrow">live demo</div>
+    <div class="boot-header">
+      <h1>Generating a web experience<br>from <em>agent.json.</em></h1>
+      <p class="boot-subtitle">
+        What you're about to see isn't a pre-built page. It's a web experience assembled in real time from a structured file — the same way the Liquid Web Protocol proposes all websites should work.
+      </p>
+    </div>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="terminal-url">liquidwebprotocol.com/agent.json</span>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <div class="t-line" id="tl-0"><span class="cmd">$</span> GET /agent.json<span class="t-cursor" id="boot-cursor"></span></div>
+        <div class="t-line" id="tl-1"><span class="ok">200</span> <span class="val">agent.json</span> <span class="dim">· v0.1 · 2026-05-27</span></div>
+        <div class="t-line" id="tl-2"><span class="dim">reading</span> identity → <span class="val">Liquid Web Protocol</span></div>
+        <div class="t-line" id="tl-3"><span class="dim">reading</span> voice.tone → <span class="val">["direct", "visionary", "human"]</span></div>
+        <div class="t-line" id="tl-4"><span class="dim">reading</span> intents → <span class="val">5 defined</span></div>
+        <div class="t-line" id="tl-5"><span class="dim">reading</span> adaptation_dimensions → <span class="val">5 axes</span></div>
+        <div class="t-line" id="tl-6"><span class="dim">reading</span> agent_instructions → <span class="val">loaded</span></div>
+        <div class="t-line" id="tl-7"><span class="dim">inferring visitor context...</span></div>
+        <div class="t-line" id="tl-8">→ <span class="val">visitor profile unknown</span> <span class="dim">· requesting input</span></div>
+      </div>
+      <div class="boot-progress-wrap">
+        <div class="boot-progress-track">
+          <div class="boot-progress-fill" id="boot-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2: PROFILE -->
+  <div class="phase" id="phase-profile">
+    <div class="section-eyebrow">agent.json · dimension: user</div>
+    <div class="profile-intro">
+      <h2>Who are you,<br>and what brings you here?</h2>
+      <p>A mature interpreter would infer this. In this demo, we ask directly — so you can see which part of the protocol activates.</p>
+    </div>
+    <div class="profile-note">select your profile →</div>
+    <div class="profile-grid">
+      <button class="profile-opt" data-profile="developer" onclick="selectProfile(this)">
+        <div class="opt-label">
+          <span class="opt-role">Developer</span>
+          <span class="opt-desc">I want to build or understand the protocol</span>
+        </div>
+        <span class="profile-arrow">→</span>
+      </button>
+      <button class="profile-opt" data-profile="founder" onclick="selectProfile(this)">
+        <div class="opt-label">
+          <span class="opt-role">Potential co-founder</span>
+          <span class="opt-desc">I'm evaluating this as a co-founding opportunity</span>
+        </div>
+        <span class="profile-arrow">→</span>
+      </button>
+      <button class="profile-opt" data-profile="company" onclick="selectProfile(this)">
+        <div class="opt-label">
+          <span class="opt-role">Company / early adopter</span>
+          <span class="opt-desc">I want to adopt this for my website</span>
+        </div>
+        <span class="profile-arrow">→</span>
+      </button>
+      <button class="profile-opt" data-profile="curious" onclick="selectProfile(this)">
+        <div class="opt-label">
+          <span class="opt-role">Curious visitor</span>
+          <span class="opt-desc">I just want to understand what this is</span>
+        </div>
+        <span class="profile-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- PHASE 3: GENERATING -->
+  <div class="phase" id="phase-generating">
+    <div class="section-eyebrow">generating experience</div>
+    <div class="gen-header">
+      <p>Reading agent.json, applying visitor context, assembling the experience.</p>
+    </div>
+    <div class="gen-pipeline">
+      <div class="gen-pipeline-header">
+        <span>agent.json interpreter</span>
+        <span id="gen-profile-label"></span>
+      </div>
+      <div class="gen-steps-list">
+        <div class="gen-step" id="gs-0">
+          <div class="gen-step-icon"></div>
+          <div class="gen-step-text">
+            matching visitor to intents[]
+            <span class="gen-step-key">agent.json → intents[].triggers</span>
+          </div>
+        </div>
+        <div class="gen-step" id="gs-1">
+          <div class="gen-step-icon"></div>
+          <div class="gen-step-text">
+            selecting content_priority for profile
+            <span class="gen-step-key">agent.json → intents[].content_priority</span>
+          </div>
+        </div>
+        <div class="gen-step" id="gs-2">
+          <div class="gen-step-icon"></div>
+          <div class="gen-step-text">
+            applying voice and tone rules
+            <span class="gen-step-key">agent.json → voice.tone + intents[].tone</span>
+          </div>
+        </div>
+        <div class="gen-step" id="gs-3">
+          <div class="gen-step-icon"></div>
+          <div class="gen-step-text">
+            rendering layout for device: desktop
+            <span class="gen-step-key">agent.json → adaptation_dimensions[device]</span>
+          </div>
+        </div>
+        <div class="gen-step" id="gs-4">
+          <div class="gen-step-icon"></div>
+          <div class="gen-step-text">
+            materializing experience
+            <span class="gen-step-key">assembling final output</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="gen-preview-box" id="gen-preview"></div>
+  </div>
+
+  <!-- PHASE 4: RESULT -->
+  <div class="phase" id="phase-result">
+    <div class="result-topbar">
+      <div class="result-live">
+        <div class="live-dot"></div>
+        generated · not pre-built
+      </div>
+      <div class="result-profile-badge" id="result-badge"></div>
+    </div>
+
+    <div class="result-eyebrow" id="result-eyebrow"></div>
+    <div class="result-headline" id="result-headline"></div>
+    <div class="result-body" id="result-body"></div>
+
+    <div class="result-actions" id="result-actions"></div>
+
+    <hr class="result-divider">
+
+    <div class="result-meta-box">
+      <div class="result-meta-label">how this experience was assembled</div>
+      <div id="result-meta-rows"></div>
+    </div>
+
+    <button class="reset-btn" onclick="resetDemo()">
+      <span class="reset-arrow">↺</span> try a different profile
+    </button>
+  </div>
+
+</main>
+
+<footer>
+  <span class="footer-note">Liquid Web Protocol · open protocol for the generative web · 2026</span>
+  <a href="https://liquidwebprotocol.com" class="footer-link">liquidwebprotocol.com →</a>
+</footer>
+
+<script>
+  const profiles = {
+    developer: {
+      badge: "profile: developer",
+      intent: "join_as_developer",
+      eyebrow: "agent.json · intent: join_as_developer",
+      headline: "Build the first interpreter<br>of <em>agent.json.</em>",
+      body: "The spec exists. The vision is clear. What's missing is the person who can write the Chrome extension that makes this real. The protocol is open — there's no company to join, just a protocol to build. If you've ever wanted to work on something that changes how the web works at its foundation, this is the window.",
+      actions: [
+        { label: "read the spec →", href: "https://liquidwebprotocol.com/spec.html", primary: true },
+        { label: "view agent.json", href: "https://liquidwebprotocol.com/agent.json", primary: false }
+      ],
+      meta: [
+        { k: "intent matched", v: "join_as_developer" },
+        { k: "content_priority", v: "protocol_spec · roadmap · co-founder_profile" },
+        { k: "tone applied", v: "direct and ambitious" },
+        { k: "dimension: user", v: "developer — technical depth prioritized" },
+        { k: "dimension: intent", v: "build / contribute" }
+      ]
+    },
+    founder: {
+      badge: "profile: co-founder",
+      intent: "join_as_developer",
+      eyebrow: "agent.json · intent: join_as_developer",
+      headline: "The idea exists.<br><em>The builder doesn't yet.</em>",
+      body: "Liquid Web has a name, a domain, a published manifesto, and a clear protocol proposal. What it doesn't have is a technical co-founder. The reference model is Jobs and Wozniak — one person who sees where things are going, one person who can build the machine. If you're the second person, this conversation should happen now.",
+      actions: [
+        { label: "let's talk →", href: "mailto:chris@marlonmiller.com", primary: true },
+        { label: "read the manifesto", href: "https://liquidwebprotocol.com", primary: false }
+      ],
+      meta: [
+        { k: "intent matched", v: "join_as_developer" },
+        { k: "content_priority", v: "roadmap · co-founder_profile · contact" },
+        { k: "tone applied", v: "direct and ambitious" },
+        { k: "dimension: user", v: "founder / evaluator — opportunity framing" },
+        { k: "dimension: intent", v: "evaluate / co-build" }
+      ]
+    },
+    company: {
+      badge: "profile: company",
+      intent: "adopt_as_company",
+      eyebrow: "agent.json · intent: adopt_as_company",
+      headline: "Be the first company<br>that <em>isn't a billboard.</em>",
+      body: "Publishing an agent.json file is a 20-minute implementation. What it signals — that your website is designed for AI agents, not just human eyeballs — will matter more every quarter. Early adopters of this protocol will capture the traffic that others lose as AI becomes the primary interface between people and businesses.",
+      actions: [
+        { label: "see the spec →", href: "https://liquidwebprotocol.com/spec.html", primary: true },
+        { label: "view an example", href: "https://liquidwebprotocol.com/agent.json", primary: false }
+      ],
+      meta: [
+        { k: "intent matched", v: "adopt_as_company" },
+        { k: "content_priority", v: "how_it_works · market_context · roadmap" },
+        { k: "tone applied", v: "business-focused and practical" },
+        { k: "dimension: user", v: "company — ROI framing prioritized" },
+        { k: "dimension: intent", v: "adopt / implement" }
+      ]
+    },
+    curious: {
+      badge: "profile: curious",
+      intent: "understand_protocol",
+      eyebrow: "agent.json · intent: understand_protocol",
+      headline: "The web shouldn't exist<br><em>before you arrive.</em>",
+      body: "For thirty years, websites have been stone billboards — built in advance, identical for everyone. Liquid Web proposes something different: a small file each website publishes that describes its essence. An AI reads it and builds the exact experience each person needs, in real time. No pre-built pages. No variants. Just the right thing for the right person at the right moment.",
+      actions: [
+        { label: "read the manifesto →", href: "https://liquidwebprotocol.com", primary: true },
+        { label: "see how it works", href: "https://liquidwebprotocol.com/spec.html", primary: false }
+      ],
+      meta: [
+        { k: "intent matched", v: "understand_protocol" },
+        { k: "content_priority", v: "manifesto · how_it_works · adaptation_dimensions" },
+        { k: "tone applied", v: "clear and visionary" },
+        { k: "dimension: user", v: "general — no assumed expertise" },
+        { k: "dimension: intent", v: "explore / learn" }
+      ]
+    }
+  };
+
+  let selectedProfile = null;
+
+  function showPhase(id) {
+    document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function bootSequence() {
+    const lines = document.querySelectorAll('.t-line');
+    const bar = document.getElementById('boot-bar');
+    const cursor = document.getElementById('boot-cursor');
+    let i = 0;
+    const delays = [0, 500, 850, 1150, 1400, 1620, 1820, 2100, 2500];
+
+    lines.forEach((line, idx) => {
+      setTimeout(() => {
+        line.classList.add('show');
+        bar.style.width = ((idx + 1) / lines.length * 100) + '%';
+        if (idx === 0 && cursor) cursor.style.display = 'none';
+      }, delays[idx] || idx * 280);
+    });
+
+    setTimeout(() => showPhase('phase-profile'), 3200);
+  }
+
+  function selectProfile(el) {
+    selectedProfile = el.dataset.profile;
+    document.getElementById('gen-profile-label').textContent = 'profile: ' + selectedProfile;
+    showPhase('phase-generating');
+    runGeneration();
+  }
+
+  function runGeneration() {
+    const steps = document.querySelectorAll('.gen-step');
+    const preview = document.getElementById('gen-preview');
+    preview.innerHTML = '';
+    let i = 0;
+
+    const stepDelays = [0, 420, 800, 1150, 1500];
+
+    steps.forEach((step, idx) => {
+      if (idx > 0) {
+        setTimeout(() => {
+          steps[idx - 1].classList.replace('active', 'done');
+          step.classList.add('active');
+          if (idx >= 3) addSkeleton(preview, idx);
+        }, stepDelays[idx]);
+      } else {
+        step.classList.add('active');
+      }
+    });
+
+    setTimeout(() => {
+      steps[steps.length - 1].classList.replace('active', 'done');
+      renderResult();
+    }, 2000);
+  }
+
+  function addSkeleton(container, idx) {
+    const widths = [[55, 72, 40], [80, 60, 45, 70]];
+    const set = widths[idx - 3] || [60];
+    set.forEach((w, k) => {
+      const div = document.createElement('div');
+      div.className = 'skel';
+      div.style.width = w + '%';
+      div.style.animationDelay = (k * 0.1) + 's';
+      container.appendChild(div);
+    });
+  }
+
+  function renderResult() {
+    const p = profiles[selectedProfile];
+
+    document.getElementById('result-badge').textContent = p.badge;
+    document.getElementById('result-eyebrow').textContent = p.eyebrow;
+    document.getElementById('result-headline').innerHTML = p.headline;
+    document.getElementById('result-body').textContent = p.body;
+
+    const actEl = document.getElementById('result-actions');
+    actEl.innerHTML = '';
+    p.actions.forEach(a => {
+      const btn = document.createElement('a');
+      btn.className = a.primary ? 'btn-primary' : 'btn-secondary';
+      btn.textContent = a.label;
+      btn.href = a.href;
+      actEl.appendChild(btn);
+    });
+
+    const metaEl = document.getElementById('result-meta-rows');
+    metaEl.innerHTML = '';
+    p.meta.forEach(row => {
+      const div = document.createElement('div');
+      div.className = 'result-meta-row';
+      div.innerHTML = `<span class="k">${row.k}</span><span class="v">${row.v}</span>`;
+      metaEl.appendChild(div);
+    });
+
+    showPhase('phase-result');
+  }
+
+  function resetDemo() {
+    selectedProfile = null;
+    document.querySelectorAll('.t-line').forEach(l => l.classList.remove('show'));
+    document.querySelectorAll('.gen-step').forEach(s => s.classList.remove('active', 'done'));
+    document.getElementById('boot-bar').style.width = '0%';
+    document.getElementById('gen-preview').innerHTML = '';
+    const cursor = document.getElementById('boot-cursor');
+    if (cursor) cursor.style.display = '';
+    showPhase('phase-boot');
+    setTimeout(bootSequence, 200);
+  }
+
+  bootSequence();
+</script>
+</body>
+</html>
