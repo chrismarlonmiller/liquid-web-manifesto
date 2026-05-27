@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,6 @@
     --paper-3: #e4dfd4;
     --accent: #1a1a8c;
     --accent-soft: rgba(26, 26, 140, 0.08);
-    --accent-border: rgba(26, 26, 140, 0.2);
     --rule: rgba(14, 14, 14, 0.12);
     --rule-strong: rgba(14, 14, 14, 0.28);
   }
@@ -91,9 +90,27 @@
     text-decoration: none;
   }
 
-  .header-logo span {
-    color: var(--accent);
+  .header-logo span { color: var(--accent); }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
   }
+
+  .nav-link {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover { color: var(--ink); }
+  .nav-link.active { color: var(--accent); }
 
   .lang-toggle {
     display: flex;
@@ -122,6 +139,13 @@
     background: var(--ink);
     color: var(--paper);
   }
+
+  /* ── I18N ── */
+  .lang-en .t-es, .lang-es .t-en { display: none; }
+  .lang-en .t-en, .lang-es .t-es { display: revert; }
+  span.t-en, span.t-es { display: none; }
+  .lang-en span.t-en { display: inline; }
+  .lang-es span.t-es { display: inline; }
 
   /* ── HERO ── */
   .hero {
@@ -168,14 +192,13 @@
     line-height: 1.6;
     color: var(--ink-2);
     max-width: 600px;
-
   }
 
   .owner {
-    font-family:'EB Garamond', serif; f
-    ont-size: 22px; 
+    font-family: 'EB Garamond', serif;
+    font-size: 22px;
     font-style: italic;
-    color:var(--ink-3);
+    color: var(--ink-3);
     padding-bottom: 60px;
     border-bottom: 1px solid var(--rule-strong);
   }
@@ -280,7 +303,6 @@
     margin: 3rem 0;
     padding-left: 28px;
     border-left: 3px solid var(--accent);
-    position: relative;
   }
 
   /* ── PERSONA CARDS ── */
@@ -310,8 +332,6 @@
     background: var(--accent);
     opacity: 0.3;
   }
-
-  .persona-card:hover { border-color: var(--rule-strong); }
 
   .persona-name {
     font-family: 'Syne', sans-serif;
@@ -382,7 +402,6 @@
   .protocol-key {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
-    font-weight: 400;
     color: rgba(255,255,255,0.45);
     min-width: 130px;
     flex-shrink: 0;
@@ -455,7 +474,6 @@
     line-height: 1.65;
     color: var(--ink-2);
     padding-left: 24px;
-    border-left: none;
     flex: 1;
   }
 
@@ -544,49 +562,7 @@
     color: var(--ink-4);
     text-transform: uppercase;
     line-height: 2;
-  }
-
-  /* ── PILLARS ── */
-  .pillars-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin: 2rem 0;
-  }
-
-  .pillar-card {
-    background: var(--paper-2);
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-    padding: 20px;
-    transition: border-color 0.2s;
-  }
-
-  .pillar-card:hover { border-color: var(--rule-strong); }
-
-  .pillar-num {
-    font-family: 'EB Garamond', serif;
-    font-size: 36px;
-    font-weight: 600;
-    color: var(--ink-4);
-    line-height: 1;
-    margin-bottom: 12px;
-  }
-
-  .pillar-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 8px;
-    letter-spacing: 0.03em;
-  }
-
-  .pillar-desc {
-    font-family: 'EB Garamond', serif;
-    font-size: 15px;
-    color: var(--ink-3);
-    line-height: 1.55;
+    text-decoration: none;
   }
 
   /* ── ANIMATIONS ── */
@@ -604,6 +580,7 @@
   @media (max-width: 768px) {
     .site-header { padding: 0 20px; }
     .hero, .content { padding-left: 20px; padding-right: 20px; }
+    .header-nav { display: none; }
 
     .chapter-block {
       grid-template-columns: 1fr;
@@ -611,26 +588,22 @@
     }
 
     .chapter-sidebar { position: static; }
-
     .protocol-block { padding: 24px 20px; }
     .protocol-row { flex-direction: column; gap: 6px; }
     .protocol-key { min-width: unset; }
-
     .cta-block { padding: 32px 24px; }
-
     .timeline::before { left: 52px; }
     .timeline-year { min-width: 52px; }
   }
 
-  /* ── PRINT / REDUCED MOTION ── */
   @media (prefers-reduced-motion: reduce) {
     .hero-eyebrow, .hero-headline, .hero-sub, .owner { animation: none; }
     .scroll-hint::after { animation: none; }
   }
 </style>
 </head>
-<body>
-</header>
+<body class="lang-en">
+
 <header class="site-header">
   <a href="https://liquidwebprotocol.com/" class="header-logo">Liquid<span>Web</span> Protocol</a>
   <nav class="header-nav">
@@ -639,25 +612,24 @@
     <a href="spec.html" class="nav-link">agent.json</a>
     <a href="faq.html" class="nav-link t-en">FAQ</a>
     <a href="faq.html" class="nav-link t-es">Preguntas</a>
-    <a href="example.html" class="nav-link active t-en">Example</a>
-    <a href="example.html" class="nav-link active t-es">Ejemplo</a>
   </nav>
   <div class="lang-toggle">
     <button class="lang-btn" id="btn-es" onclick="showLang('es')">ES</button>
     <button class="lang-btn active" id="btn-en" onclick="showLang('en')">EN</button>
   </div>
 </header>
+
 <!-- ════════════════════════════════════════════════
      HERO
 ════════════════════════════════════════════════ -->
 <section class="hero">
-  <div id="hero-es">
+  <div id="hero-es" class="t-es">
     <p class="hero-eyebrow">Manifiesto · Propuesta abierta · 2026</p>
     <h1 class="hero-headline">El futuro<br>de la web<br><em>será líquido.</em></h1>
     <p class="hero-sub">Durante treinta años hemos construido webs como si fueran carteles de piedra. Fijos. Universales. Idénticos para todos. Eso se acabó.</p>
     <p class="owner"><b>Por Chris Marlon Miller</b></p>
   </div>
-  <div id="hero-en" style="display:none;">
+  <div id="hero-en" class="t-en">
     <p class="hero-eyebrow">Manifesto · Open proposal · 2026</p>
     <h1 class="hero-headline">The future<br>of the web<br><em>will be liquid.</em></h1>
     <p class="hero-sub">For thirty years we've built websites like stone billboards. Fixed. Universal. Identical for everyone. That's over.</p>
@@ -670,7 +642,7 @@
      CONTENT — ESPAÑOL
 ════════════════════════════════════════════════ -->
 <main class="content">
-<div id="lang-es" class="section visible">
+<div id="lang-es" class="section t-es">
 
   <!-- I -->
   <div class="chapter-block">
@@ -794,7 +766,7 @@
     </div>
   </div>
 
-  <!-- Closing -->
+  <!-- Closing ES -->
   <div class="closing-section">
     <p class="closing-poem">El agua toma la forma<br>de su contenedor.<br>La web también debería.</p>
     <p class="sig">Liquid Web · Propuesta abierta para la web generativa · 2026<br>liquidweb.protocol · El futuro de la web será líquido.<br><strong>Chris Marlon Miller</strong> · <a class="sig" href="mailto:chris@marlonmiller.com">chris@marlonmiller.com</a></p>
@@ -805,7 +777,7 @@
 <!-- ════════════════════════════════════════════════
      CONTENT — ENGLISH
 ════════════════════════════════════════════════ -->
-<div id="lang-en" class="section">
+<div id="lang-en" class="section t-en">
 
   <!-- I -->
   <div class="chapter-block">
@@ -852,7 +824,7 @@
   <div class="chapter-block">
     <div class="chapter-sidebar">
       <p class="chapter-num">Chapter III</p>
-      <p class="chapter-title">The protocol</p>
+      <p class="chapter-title">The proposal</p>
     </div>
     <div class="chapter-body">
       <p class="body-text">Liquid Web proposes a paradigm shift — simple in form, radical in its implications.</p>
@@ -929,7 +901,7 @@
     </div>
   </div>
 
-  <!-- Closing -->
+  <!-- Closing EN -->
   <div class="closing-section">
     <p class="closing-poem">Water takes the shape<br>of its container.<br>The web should too.</p>
     <p class="sig">Liquid Web · Open proposal for the generative web · 2026<br>liquidweb.protocol · The future of the web will be liquid.<br><strong>Chris Marlon Miller</strong> · <a class="sig" href="mailto:chris@marlonmiller.com">chris@marlonmiller.com</a></p>
@@ -940,19 +912,21 @@
 
 <script>
 function showLang(lang) {
-  document.getElementById('nav-manifesto').textContent = lang === 'es' ? 'Manifiesto' : 'Manifesto';
-  document.getElementById('nav-faq').textContent = lang === 'es' ? 'Preguntas' : 'FAQ';
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
-  document.getElementById('lang-' + lang).classList.add('visible');
-  document.getElementById('hero-es').style.display = lang === 'es' ? '' : 'none';
-  document.getElementById('hero-en').style.display = lang === 'en' ? '' : 'none';
+  document.body.className = 'lang-' + lang;
   document.getElementById('btn-es').classList.toggle('active', lang === 'es');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
+  localStorage.setItem('lwp-lang', lang);
 }
+
 document.addEventListener('DOMContentLoaded', () => {
-  const userLang = navigator.language?.startsWith('es') ? 'es' : 'en';
-  showLang(userLang);
+  const saved = localStorage.getItem('lwp-lang');
+  if (saved) {
+    showLang(saved);
+  } else {
+    const userLang = navigator.language?.startsWith('es') ? 'es' : 'en';
+    showLang(userLang);
+  }
 });
 </script>
 </body>
