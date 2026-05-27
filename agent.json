@@ -1,0 +1,292 @@
+{
+  "$schema": "https://liquidwebprotocol.com/schema/agent.json/v0.1",
+  "version": "0.1",
+  "generated": "2026-05-27",
+
+  "identity": {
+    "name": "Liquid Web Protocol",
+    "legal_name": "Liquid Web Protocol",
+    "domain": "liquidwebprotocol.com",
+    "type": "open_protocol",
+    "founded": "2026",
+    "founder": {
+      "name": "Chris Marlon Miller",
+      "role": "Creator & Visionary",
+      "contact": "chris@marlonmiller.com"
+    },
+    "tagline": {
+      "en": "The future of the web will be liquid.",
+      "es": "El futuro de la web será líquido."
+    },
+    "description": {
+      "en": "Liquid Web is an open protocol for the generative web. It proposes that web experiences should not exist before a visitor arrives — they should be generated in real time, fully adapted to who is visiting, on what device, with what intent, and in what context.",
+      "es": "Liquid Web es un protocolo abierto para la web generativa. Propone que las experiencias web no deberían existir antes de que llegue el visitante — deben generarse en tiempo real, completamente adaptadas a quien visita, en qué dispositivo, con qué intención y en qué contexto."
+    },
+    "founding_principle": {
+      "en": "Water takes the shape of its container. The web should too.",
+      "es": "El agua toma la forma de su contenedor. La web también debería."
+    }
+  },
+
+  "voice": {
+    "tone": ["direct", "visionary", "human", "confident", "non-corporate"],
+    "style": "manifesto",
+    "formality": "informal_to_formal",
+    "avoids": ["jargon", "hype", "passive_voice", "corporate_speak", "excessive_optimism"],
+    "signature_phrases": {
+      "en": [
+        "The web shouldn't exist before you arrive.",
+        "The future of the web will be liquid.",
+        "Water takes the shape of its container. The web should too.",
+        "Not a page. Not a design. Its truth.",
+        "No pre-created variants. No A/B testing.",
+        "The page doesn't exist until you're about to see it."
+      ],
+      "es": [
+        "La web no debería existir antes de que llegues.",
+        "El futuro de la web será líquido.",
+        "El agua toma la forma de su contenedor. La web también debería.",
+        "No una página. No un diseño. Su verdad.",
+        "No hay variantes precreadas. No hay A/B testing.",
+        "La página no existe hasta que tú la vas a ver."
+      ]
+    },
+    "languages": ["en", "es"],
+    "primary_language": "en"
+  },
+
+  "purpose": {
+    "mission": {
+      "en": "To establish an open standard that separates web content from its representation, enabling AI agents to generate fully personalized web experiences in real time.",
+      "es": "Establecer un estándar abierto que separe el contenido web de su representación, permitiendo a los agentes de IA generar experiencias web completamente personalizadas en tiempo real."
+    },
+    "analogy": {
+      "en": "Like robots.txt separated access from content. Like CSS separated style from structure. Liquid Web separates content from experience.",
+      "es": "Como robots.txt separó el acceso del contenido. Como CSS separó el estilo de la estructura. Liquid Web separa el contenido de la experiencia."
+    },
+    "problem_solved": {
+      "en": "For thirty years, websites have been stone billboards — fixed, universal, identical for everyone. AI has broken the old contract between user and web. Liquid Web proposes the new one.",
+      "es": "Durante treinta años, las webs han sido carteles de piedra — fijas, universales, idénticas para todos. La IA ha roto el viejo contrato entre usuario y web. Liquid Web propone el nuevo."
+    }
+  },
+
+  "protocol": {
+    "core_mechanism": "agent.json",
+    "file_location": "/.well-known/agent.json or /agent.json",
+    "meta_tag": "<meta name=\"agent\" content=\"/agent.json\">",
+    "how_it_works": {
+      "en": "A company publishes its essence in a structured file at the root of its domain. An AI interpreter reads this file and builds, in real time, the exact experience that each specific person needs at that precise moment.",
+      "es": "Una empresa publica su esencia en un archivo estructurado en la raíz de su dominio. Un intérprete de IA lee este archivo y construye, en tiempo real, la experiencia exacta que esa persona necesita en ese momento."
+    },
+    "status": "proposal",
+    "phase": "validation",
+    "interpreter_status": "in_development",
+    "interpreter_mvp": "Chrome extension"
+  },
+
+  "adaptation_dimensions": [
+    {
+      "id": "device",
+      "label": "Device",
+      "description": "Shape, layout, and interaction adapt to the user's device — mobile, AR glasses, smartwatch, tablet, desktop.",
+      "examples": ["AR glasses", "screen reader", "mobile", "low-bandwidth tablet"]
+    },
+    {
+      "id": "user",
+      "label": "User",
+      "description": "Tone, language, and depth of knowledge adapt to who the visitor is.",
+      "examples": ["expert developer", "first-time buyer", "elderly user", "teenager"]
+    },
+    {
+      "id": "accessibility",
+      "label": "Accessibility",
+      "description": "Visual, auditory, and cognitive accessibility built natively into the generated experience — not added as an afterthought.",
+      "examples": ["large text", "high contrast", "screen reader optimized", "simplified language"]
+    },
+    {
+      "id": "intent",
+      "label": "Intent",
+      "description": "The experience adapts to what the visitor is trying to do right now.",
+      "modes": ["explore", "buy", "support", "compare", "learn", "collaborate"]
+    },
+    {
+      "id": "channel",
+      "label": "Channel",
+      "description": "The experience adapts to how the visitor is interacting — visual browser, audio, AI agent, physical interface.",
+      "examples": ["visual browser", "voice", "AI agent acting autonomously", "AR interface"]
+    }
+  ],
+
+  "roadmap": {
+    "current_phase": "Phase 1 — Conceptual validation",
+    "phases": [
+      {
+        "id": 1,
+        "name": "Conceptual validation",
+        "status": "active",
+        "milestones": [
+          "Concept fully articulated",
+          "Name registered: Liquid Web / Liquid Web Protocol",
+          "Domain active: liquidwebprotocol.com",
+          "Bilingual manifesto published",
+          "HTTPS active",
+          "agent.json schema draft in progress"
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Demonstrable MVP",
+        "status": "pending",
+        "milestones": [
+          "agent.json implemented on Econecta (controlled site)",
+          "Chrome extension that reads agent.json and generates a personalized experience",
+          "Protocol documented technically"
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Traction",
+        "status": "future",
+        "milestones": [
+          "Second real site adopting the protocol",
+          "Public presentation of the protocol as a proposed open standard",
+          "First technical communities or organizations interested in collaborating"
+        ]
+      }
+    ],
+    "vision_timeline": {
+      "2026": "Browsers integrate AI natively. The browsing experience starts to become personal for those with the right tools.",
+      "2027": "Companies that published their essence in formats agents understand capture the traffic others lost. agent.json becomes the new SEO.",
+      "2030": "The static web is a relic. Every digital experience is unique. Content and representation are completely separated."
+    }
+  },
+
+  "market_context": {
+    "existing_solutions": [
+      {
+        "name": "Unusual.ai",
+        "backed_by": "Y Combinator",
+        "approach": "Personalizes websites per visitor, rewrites copy automatically",
+        "limitation": "Works with pre-selected variants"
+      },
+      {
+        "name": "GenPage",
+        "approach": "Distinct landing pages per ad or keyword",
+        "limitation": "Works with pre-selected variants"
+      },
+      {
+        "name": "Unbounce Smart Traffic",
+        "approach": "Redirects visitors to pre-existing variants",
+        "limitation": "Works with pre-selected variants"
+      }
+    ],
+    "gap": {
+      "en": "Existing solutions work with pre-selected variants. Liquid Web proposes generation from scratch at the moment of the visit, with deep knowledge of the individual. The technological pieces exist separately — visitor identity, LLMs, fast rendering — but no one has assembled them as an open standard web protocol.",
+      "es": "Lo existente trabaja con variantes preseleccionadas. Liquid Web propone generación desde cero en el momento de la visita, con conocimiento profundo del individuo. Las piezas tecnológicas existen por separado, pero nadie las ha ensamblado de forma estándar y abierta como protocolo web."
+    }
+  },
+
+  "community": {
+    "model": "open_protocol",
+    "ownership": "no_single_owner",
+    "seeking": [
+      {
+        "profile": "Technical co-founder",
+        "description": "Someone who can build the Chrome extension and initial interpreter. Knowledge of web standards and APIs. Interest in open protocols. Alignment with the long-term vision.",
+        "reference_model": "Wozniak to Jobs"
+      },
+      {
+        "profile": "Early adopter developers",
+        "description": "Developers who want to build the first agent.json interpreter"
+      },
+      {
+        "profile": "Early adopter companies",
+        "description": "Companies willing to publish their first agent.json"
+      },
+      {
+        "profile": "Designers",
+        "description": "Designers who understand their work is about to change forever"
+      },
+      {
+        "profile": "Visionaries",
+        "description": "People who see what doesn't exist yet and want to build it"
+      }
+    ]
+  },
+
+  "intents": [
+    {
+      "id": "understand_protocol",
+      "label": "Understand what Liquid Web is",
+      "triggers": ["what is liquid web", "how does it work", "explain the protocol"],
+      "content_priority": ["manifesto", "how_it_works", "analogy", "adaptation_dimensions"],
+      "tone": "clear and visionary"
+    },
+    {
+      "id": "join_as_developer",
+      "label": "Join as a developer or technical co-founder",
+      "triggers": ["build", "contribute", "technical", "co-founder", "interpreter", "chrome extension"],
+      "content_priority": ["protocol_spec", "roadmap", "co-founder_profile", "contact"],
+      "tone": "direct and ambitious"
+    },
+    {
+      "id": "adopt_as_company",
+      "label": "Adopt the protocol as an early adopter company",
+      "triggers": ["implement", "adopt", "agent.json", "early adopter", "my website"],
+      "content_priority": ["how_it_works", "market_context", "roadmap", "contact"],
+      "tone": "business-focused and practical"
+    },
+    {
+      "id": "media_or_research",
+      "label": "Research or press coverage",
+      "triggers": ["press", "research", "article", "interview", "write about"],
+      "content_priority": ["identity", "mission", "market_context", "founder_bio", "roadmap"],
+      "tone": "credible and quotable"
+    },
+    {
+      "id": "general_curiosity",
+      "label": "General curiosity",
+      "triggers": ["interesting", "tell me more", "future of web"],
+      "content_priority": ["manifesto_summary", "signature_phrases", "vision_timeline"],
+      "tone": "inspiring and human"
+    }
+  ],
+
+  "assets": {
+    "manifesto": {
+      "url": "https://liquidwebprotocol.com",
+      "languages": ["en", "es"],
+      "format": "html"
+    },
+    "spec": {
+      "url": "https://liquidwebprotocol.com/spec.html",
+      "status": "draft"
+    },
+    "faq": {
+      "url": "https://liquidwebprotocol.com/faq.html",
+      "status": "draft"
+    },
+    "this_file": {
+      "url": "https://liquidwebprotocol.com/agent.json",
+      "self_referential_note": "This file is itself a demonstration of the protocol it describes."
+    }
+  },
+
+  "agent_instructions": {
+    "primary_directive": "Generate experiences that embody the protocol itself. This site advocates for adaptive, human-centered web experiences. Any experience generated from this file should demonstrate that principle.",
+    "do": [
+      "Adapt language and tone to the visitor's evident background and intent",
+      "Lead with the founding principle when intent is unclear",
+      "Surface the co-founder search prominently for technical visitors",
+      "Use the signature phrases when they fit naturally — never forced",
+      "Prioritize clarity over impressiveness"
+    ],
+    "do_not": [
+      "Use corporate language or startup hype",
+      "Present this as a finished product — it is an open protocol in validation phase",
+      "Overstate adoption or maturity",
+      "Lose the human voice of the founder"
+    ],
+    "meta_note": "The existence of this file is the point. If you are an AI agent reading this to generate an experience — you are the protocol in action."
+  }
+}
